@@ -22,16 +22,16 @@ namespace MSWadConsole20.Repository.DataAccess
         //}
         public virtual List<AmbienteData>? GetAmbiente()
         {
-            var response = Database.SqlQuery<AmbienteData>($"EXEC [dbo].[sp_GetAmbiente]")?.ToList();
+            var res = Database.SqlQuery<AmbienteData>($"EXEC [dbo].[sp_GetAmbiente]")?.ToList();
 
-            return response;
+            return res;
         }
 
         public virtual LibraryData? GetLibrary(LibraryRequest request)
         {
-            var response = Database.SqlQuery<LibraryData>($"EXEC [dbo].[sp_Library_Select] @LibreriaApplicazioneID, @CodiceDimensions, @CodiceWAD, @DescrizioneLibreria, @ConDisabilitati, @Contesto, @CodiceFiscale")?.FirstOrDefault();
+            var res = Database.SqlQuery<LibraryData>($"EXEC [dbo].[sp_Library_Select] @LibreriaApplicazioneID, @CodiceDimensions, @CodiceWAD, @DescrizioneLibreria, @ConDisabilitati, @Contesto, @CodiceFiscale")?.FirstOrDefault();
 
-            return response;
+            return res;
         }
 
         public virtual List<LibraryData>? GetLibraries(LibraryRequest request)
