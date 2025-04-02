@@ -1,0 +1,6 @@
+@MSWadConsole20_HostAddress = http://localhost:5052
+
+GET {{MSWadConsole20_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
