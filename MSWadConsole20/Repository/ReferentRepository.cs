@@ -40,5 +40,22 @@ namespace MSWadConsole20.Repository
             }
             return response;
         }
+
+        public ServiceResponse<StoredData<List<ReferenteModel>>> GetReferents(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData<List<ReferenteModel>>>();
+            try
+            {
+                response.Data = _dataAccess.GetReferents(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare i referenti");
+                response.Success = false;
+                response.UserMessage = "Non è possibile completare l'operazione.";
+            }
+            return response;
+        }
     }
 }

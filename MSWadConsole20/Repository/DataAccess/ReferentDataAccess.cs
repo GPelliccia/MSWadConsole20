@@ -31,7 +31,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
-            var res = connection.QueryFirstOrDefault<ReferenteModel>(
+            var referente = connection.QueryFirstOrDefault<ReferenteModel>(
                 "[dbo].[sp_ReferentiSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure
@@ -41,7 +41,37 @@ namespace MSWadConsole20.Repository.DataAccess
             response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
 
             if (response.ErrorCode == 0)
-                response.Data = res;
+                response.Data = referente;
+
+            return response;
+        }
+
+        public StoredData<List<ReferenteModel>>? GetReferents(ReferentRequest request)
+        {
+            StoredData<List<ReferenteModel>> response = new StoredData<List<ReferenteModel>>();
+
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);
+            parameters.Add("@Cognome", request.Cognome, DbType.String);
+            parameters.Add("@Nome", request.Nome, DbType.String);
+            parameters.Add("@Tipo", request.Tipo, DbType.String);
+            parameters.Add("@Utenza", request.Utenza, DbType.String);
+            parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Int32);
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+
+            var listaReferenti = connection.Query<ReferenteModel>(
+                "[dbo].[sp_ReferentiSelect]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            ).AsList();           
+
+            response.ErrorCode = parameters.Get<int>("@ErrorCode");
+            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+
+            if (response.ErrorCode == 0)
+                response.Data = listaReferenti;
 
             return response;
         }

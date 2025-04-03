@@ -15,5 +15,7 @@ namespace MSWadConsole20.Services
         }
 
         public ServiceResponse<StoredData<ReferenteModel>> GetReferent(ReferentRequest request) => _repository.GetReferent(request);
+
+        public ServiceResponse<StoredData<List<ReferenteModel>>> GetReferents(ReferentRequest request) => _repository.GetReferents(request);
     }
 }
