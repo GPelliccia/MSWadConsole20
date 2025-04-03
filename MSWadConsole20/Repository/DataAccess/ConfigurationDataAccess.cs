@@ -95,5 +95,57 @@ namespace MSWadConsole20.Repository.DataAccess
 
             return response;
         }
+
+        public StoredData UpdateLibrary(LibraryRequest request)
+        {
+            var response = new StoredData();
+
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
+            parameters.Add("@CodiceDimensions", request.CodiceDimensions, DbType.String);
+            parameters.Add("@DescrizioneLibreria", request.DescrizioneLibreria, DbType.String);
+            parameters.Add("@DataInizioAttivazione", request.DataInizioAttivazione, DbType.DateTime);
+            parameters.Add("@DataFineAttivazione", request.DataFineAttivazione, DbType.DateTime);
+            parameters.Add("@NoteLibreria", request.NoteLibreria, DbType.String);
+            parameters.Add("@FlagOffline", request.FlagOffline, DbType.Boolean);
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+
+            var x = connection.Execute(
+                "[dbo].[sp_Library_Update]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+
+            response.ErrorCode = parameters.Get<int>("@ErrorCode");
+            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+
+            return response;
+        }
+
+
+        public StoredData DeleteLibrary(LibraryRequest request)
+        {
+            var response = new StoredData();
+
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+
+            var x = connection.Execute(
+                "[dbo].[sp_Library_Delete]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            response.ErrorCode = parameters.Get<int>("@ErrorCode");
+            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+
+            return response;
+        }
     }
 }

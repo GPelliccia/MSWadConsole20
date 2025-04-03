@@ -88,6 +88,48 @@ namespace MSWadConsole20.Controllers
             {
                 return Problem(ex.Message, null, 500);
             }
+
+
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<StoredData>> UpdateLibrary(LibraryRequest request)
+        {
+            try
+            {
+                var response = _ConfigurationService.UpdateLibrary(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, null, 500);
+            }
+
+
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<StoredData>> DeleteLibrary(LibraryRequest request)
+        {
+            try
+            {
+                var response = _ConfigurationService.DeleteLibrary(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, null, 500);
+            }
+
+
         }
     }
 }

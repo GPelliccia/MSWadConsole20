@@ -14,5 +14,9 @@ namespace MSWadConsole20.Contract
 
         ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request);
 
+        ServiceResponse<StoredData> UpdateLibrary(LibraryRequest request);
+
+        ServiceResponse<StoredData> DeleteLibrary(LibraryRequest request);
+
     }
 }

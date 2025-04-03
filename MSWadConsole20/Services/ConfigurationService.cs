@@ -20,5 +20,9 @@ namespace MSWadConsole20.Services
         public ServiceResponse<List<LibraryData>?> GetLibraries(LibraryRequest request) => _repository.GetLibraries(request);
 
         public ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request) => _repository.InsertLibrary(request);
+
+        public ServiceResponse<StoredData> UpdateLibrary(LibraryRequest request) => _repository.UpdateLibrary(request);
+        public ServiceResponse<StoredData> DeleteLibrary(LibraryRequest request) => _repository.DeleteLibrary(request);
+
     }
 }
