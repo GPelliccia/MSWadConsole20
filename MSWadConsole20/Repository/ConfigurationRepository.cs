@@ -1,42 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MSWadConsole20.Contract;
+﻿using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataAccess;
 using MSWadConsole20.Repository.DataModel.Request;
 using MSWadConsole20.Repository.DataModel.Response;
 using MSWadConsole20.Repository.DataModel;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace MSWadConsole20.Repository
 {
     public class ConfigurationRepository : IConfigurationRepository
     {
         private readonly IConfiguration _configuration;
-        private readonly IDbContextFactory<ConfigurationDataAccess> _serviceDataAccess;
         private readonly ILogger<ConfigurationRepository> _logger;
+        private readonly ConfigurationDataAccess _dataAccess;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationRepository" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="serviceDataAccess">The mia data access.</param>
-        public ConfigurationRepository(IConfiguration configuration, ILogger<ConfigurationRepository> logger, IDbContextFactory<ConfigurationDataAccess> serviceDataAccess)
+        public ConfigurationRepository(IConfiguration configuration, ILogger<ConfigurationRepository> logger)
         {
             _configuration = configuration;
             _logger = logger;
-            _serviceDataAccess = serviceDataAccess;
+            _dataAccess = new ConfigurationDataAccess(_configuration["DB_CONNECTION"]);
         }
 
         public ServiceResponse<List<AmbienteData>?> GetAmbiente()
         {
-            ServiceResponse<List<AmbienteData>?> response = new();
-
+            var response = new ServiceResponse<List<AmbienteData>?>();
             try
             {
-                using (var context = _serviceDataAccess.CreateDbContext())
-                {
-                    response.Data = context.GetAmbiente();
-                    response.Success = true;
-                }
+                response.Data = _dataAccess.GetAmbiente();
+                response.Success = true;
             }
             catch (Exception ex)
             {
@@ -49,15 +47,11 @@ namespace MSWadConsole20.Repository
 
         public ServiceResponse<LibraryData?> GetLibrary(LibraryRequest request)
         {
-            ServiceResponse<LibraryData?> response = new();
-
+            var response = new ServiceResponse<LibraryData?>();
             try
             {
-                using (var context = _serviceDataAccess.CreateDbContext())
-                {
-                    response.Data = context.GetLibrary(request);
-                    response.Success = true;
-                }
+                response.Data = _dataAccess.GetLibrary(request);
+                response.Success = true;
             }
             catch (Exception ex)
             {
@@ -70,15 +64,11 @@ namespace MSWadConsole20.Repository
 
         public ServiceResponse<List<LibraryData>?> GetLibraries(LibraryRequest request)
         {
-            ServiceResponse<List<LibraryData>?> response = new();
-
+            var response = new ServiceResponse<List<LibraryData>?>();
             try
             {
-                using (var context = _serviceDataAccess.CreateDbContext())
-                {
-                    response.Data = context.GetLibraries(request);
-                    response.Success = true;
-                }
+                response.Data = _dataAccess.GetLibraries(request);
+                response.Success = true;
             }
             catch (Exception ex)
             {

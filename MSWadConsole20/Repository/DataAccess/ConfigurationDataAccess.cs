@@ -1,57 +1,63 @@
-﻿using MSWadConsole20.Repository.DataModel.Request;
+﻿using Dapper;
+using MSWadConsole20.Repository.DataModel.Request;
 using MSWadConsole20.Repository.DataModel;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
-using Azure.Core;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
-    public class ConfigurationDataAccess : DbContext
+    public class ConfigurationDataAccess
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationDataAccess"/> class.
-        /// </summary>
-        /// <param name="options">The options for this context.</param>
-        public ConfigurationDataAccess([NotNull] DbContextOptions options) : base(options) { }
+        private readonly string _connectionString;
 
-        //private DataTable CreateDataTable(IEnumerable<ParameterData> parameters)
-        //{
-        //    var dt = new DataTable();
-        //    dt.Columns.AddRange([new DataColumn("CHIAVE"), new DataColumn("VALORE")]);
-        //    if (parameters != null) { foreach (var param in parameters) { dt.Rows.Add(param.CHIAVE, param.VALORE ?? string.Empty); } }
-        //    return dt;
-        //}
-        public virtual List<AmbienteData>? GetAmbiente()
+        public ConfigurationDataAccess(string connectionString)
         {
-            var res = Database.SqlQuery<AmbienteData>($"EXEC [dbo].[sp_GetAmbiente]")?.ToList();
-
-            return res;
+            _connectionString = connectionString;
         }
 
-        public virtual LibraryData? GetLibrary(LibraryRequest request)
-        {         
-            var libreriaApplicazioneIdParam = new SqlParameter() { ParameterName = "@LibreriaApplicazioneID", Value = request.LibreriaApplicazioneID };
-            var codiceWadParam = new SqlParameter() { ParameterName = "@CodiceWAD", Value = request.CodiceWAD };
-            var codiceDimensionsParam = new SqlParameter() { ParameterName = "@CodiceDimensions", Value = request.CodiceDimensions };
-            var descrizioneLibreriaParam = new SqlParameter() { ParameterName = "@DescrizioneLibreria", Value = request.DescrizioneLibreria };
-            var conDisabilitatiParam = new SqlParameter() { ParameterName = "@ConDisabilitati", Value = request.ConDisabilitati };
-            var contestoParam = new SqlParameter() { ParameterName = "@Contesto", Value = request.Contesto };
-            var codiceFiscaleParam = new SqlParameter() { ParameterName = "@CodiceFiscale", Value = request.CodiceFiscale };            
-
-            var response = Database.SqlQuery<LibraryData>($"[dbo].[sp_Library_Select] {libreriaApplicazioneIdParam},{codiceWadParam},{codiceDimensionsParam},{descrizioneLibreriaParam},{conDisabilitatiParam},{contestoParam},{codiceFiscaleParam}").AsEnumerable<LibraryData>().FirstOrDefault();
-
-            //var res = Database.SqlQuery<LibraryData>($"EXEC [dbo].[sp_Library_Select] @LibreriaApplicazioneID, @CodiceDimensions, @CodiceWAD, @DescrizioneLibreria, @ConDisabilitati, @Contesto, @CodiceFiscale")?.FirstOrDefault();
-
-            return response;
+        public List<AmbienteData>? GetAmbiente()
+        {
+            using var connection = new SqlConnection(_connectionString);
+            return connection.Query<AmbienteData>("EXEC [dbo].[sp_GetAmbiente]").AsList();
         }
 
-        public virtual List<LibraryData>? GetLibraries(LibraryRequest request)
+        public LibraryData? GetLibrary(LibraryRequest request)
         {
-            var response = Database.SqlQuery<LibraryData>($"EXEC [dbo].[sp_Library_Select] @LibreriaApplicazioneID, @CodiceDimensions, @CodiceWAD, @DescrizioneLibreria, @ConDisabilitati, @Contesto, @CodiceFiscale")?.ToList();
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
+            parameters.Add("@CodiceWAD", request.CodiceWAD, DbType.String);
+            parameters.Add("@CodiceDimensions", request.CodiceDimensions, DbType.String);
+            parameters.Add("@DescrizioneLibreria", request.DescrizioneLibreria, DbType.String);
+            parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Boolean);
+            parameters.Add("@Contesto", request.Contesto, DbType.String);
+            parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
 
-            return response;
+            return connection.QueryFirstOrDefault<LibraryData>(
+                "[dbo].[sp_Library_Select]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
+        public List<LibraryData>? GetLibraries(LibraryRequest request)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
+            parameters.Add("@CodiceWAD", request.CodiceWAD, DbType.String);
+            parameters.Add("@CodiceDimensions", request.CodiceDimensions, DbType.String);
+            parameters.Add("@DescrizioneLibreria", request.DescrizioneLibreria, DbType.String);
+            parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Boolean);
+            parameters.Add("@Contesto", request.Contesto, DbType.String);
+            parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
+
+            return connection.Query<LibraryData>(
+                "[dbo].[sp_Library_Select]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            ).AsList();
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MSWadConsole20.Contract;
-using MSWadConsole20.Repository.DataAccess;
 using MSWadConsole20.Repository;
+using MSWadConsole20.Repository.DataAccess;
 using MSWadConsole20.Services;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
 
 namespace MSWadConsole20
 {
@@ -17,22 +20,22 @@ namespace MSWadConsole20
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
 
             services.AddControllers();
 
-            if (string.IsNullOrWhiteSpace(Configuration["DB_CONNECTION"]))
-                throw new InvalidOperationException("Missing Default Connection String");
-           
-            services.AddPooledDbContextFactory<ConfigurationDataAccess>(o => { o.UseSqlServer(Configuration["DB_CONNECTION"]); });
+            var connectionString = Configuration["DB_CONNECTION"];
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new InvalidOperationException("Missing DB_CONNECTION in configuration");
 
-            
+            // Registrazione ConfigurationDataAccess con la stringa di connessione da appsettings.json
+            services.AddSingleton(sp => new ConfigurationDataAccess(connectionString));
+
             services.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
             services.AddSingleton<IConfigurationService, ConfigurationService>();
-            
+
             services.AddHealthChecks();
 
             services.AddSwaggerGen(c =>
@@ -43,16 +46,9 @@ namespace MSWadConsole20
                     Version = "v1",
                     Description = "Servizio di lettura applicazioni"
                 });
-                //// Set the comments path for the Swagger JSON and UI.
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
-
             });
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
