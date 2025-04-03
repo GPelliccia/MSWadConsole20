@@ -1,0 +1,44 @@
+﻿using MSWadConsole20.Contract;
+using MSWadConsole20.Repository.DataAccess;
+using MSWadConsole20.Repository.DataModel;
+using MSWadConsole20.Repository.DataModel.Request;
+using MSWadConsole20.Repository.DataModel.Response;
+
+namespace MSWadConsole20.Repository
+{
+    public class ReferentRepository : IReferentRepository
+    {
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<ReferentRepository> _logger;
+        private readonly ReferentDataAccess _dataAccess;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReferentRepository" /> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
+        public ReferentRepository(IConfiguration configuration, ILogger<ReferentRepository> logger)
+        {
+            _configuration = configuration;
+            _logger = logger;
+            _dataAccess = new ReferentDataAccess(_configuration["DB_CONNECTION"]);
+        }
+
+        public ServiceResponse<StoredData<ReferenteModel>> GetReferent(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData<ReferenteModel>>();
+            try
+            {
+                response.Data = _dataAccess.GetReferent(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il referente");
+                response.Success = false;
+                response.UserMessage = "Non è possibile completare l'operazione.";
+            }
+            return response;
+        }
+    }
+}
