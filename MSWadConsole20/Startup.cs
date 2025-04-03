@@ -39,7 +39,7 @@ namespace MSWadConsole20
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "MS01035 - MsWadCommonService",
+                    Title = "MS01035 - MsWadConsole20",
                     Version = "v1",
                     Description = "Servizio di lettura applicazioni"
                 });
@@ -59,7 +59,7 @@ namespace MSWadConsole20
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MS00914 - PushEvent"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MSWadConsole20"));
             }
 
             app.UseRouting();
