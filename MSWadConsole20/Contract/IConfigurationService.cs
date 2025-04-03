@@ -10,5 +10,7 @@ namespace MSWadConsole20.Contract
         ServiceResponse<LibraryData?> GetLibrary(LibraryRequest request);
         //ConfigurationResponse GetLibraries(ConfigurationRequest request)
         ServiceResponse<List<LibraryData>?> GetLibraries(LibraryRequest request);
+
+        ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request);
     }
 }

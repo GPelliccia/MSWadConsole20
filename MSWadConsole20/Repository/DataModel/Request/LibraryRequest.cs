@@ -10,7 +10,15 @@
 
         public string? DescrizioneLibreria { get; set; }
 
-        public bool? @ConDisabilitati { get; set; }
+        public string? NoteLibreria { get; set; }
+
+        public bool? FlagDisabilitati { get; set; }
+
+        public bool? FlagOffline { get; set; }
+
+        public DateTime? DataInizioAttivazione { get; set; }
+
+        public DateTime? DataFineAttivazione { get; set; }
 
         public int? Contesto { get; set; }
 

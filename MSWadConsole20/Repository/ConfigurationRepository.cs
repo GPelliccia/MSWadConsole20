@@ -40,7 +40,7 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
                 response.Success = false;
-                response.ErrorMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = "Non è possibile completare l'operazione.";
             }
             return response;
         }
@@ -57,7 +57,7 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
                 response.Success = false;
-                response.ErrorMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = "Non è possibile completare l'operazione.";
             }
             return response;
         }
@@ -74,7 +74,24 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
                 response.Success = false;
-                response.ErrorMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = "Non è possibile completare l'operazione.";
+            }
+            return response;
+        }
+
+        public ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request)
+        {
+            var response = new ServiceResponse<StoredData<int>>();
+            try
+            {
+                response.Data = _dataAccess.InsertLibrary(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.Success = false;
+                response.UserMessage = response.Data?.ErrorMessage;
             }
             return response;
         }
