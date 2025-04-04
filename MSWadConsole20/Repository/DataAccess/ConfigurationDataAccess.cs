@@ -65,6 +65,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData<int>();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
@@ -82,6 +83,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var x = connection.Execute(
                 "[dbo].[sp_Library_Insert]",
                 parameters,
+                transaction : transaction,
                 commandType: CommandType.StoredProcedure
             );
 
@@ -91,13 +93,13 @@ namespace MSWadConsole20.Repository.DataAccess
 
             if (response.ErrorCode == 0)
             {
+                transaction.Commit();
                 response.Data = parameters.Get<int>("@LibreriaApplicazioneID");
             }
             else
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
 
             return response;
         }
@@ -107,6 +109,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
@@ -122,23 +125,24 @@ namespace MSWadConsole20.Repository.DataAccess
             try
             {
                 var x = connection.Execute(
-                                "[dbo].[sp_Library_Update]",
-                                parameters,
-                                commandType: CommandType.StoredProcedure
+                    "[dbo].[sp_Library_Update]",
+                    parameters,
+                    transaction : transaction,
+                    commandType: CommandType.StoredProcedure
                 );
-
-
-
-
 
                 response.ErrorCode = parameters.Get<int>("@ErrorCode");
                 response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+                if (response.ErrorCode == 0)
+                {
+                    transaction.Commit();
+                }
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
+           
             return response;
         }
 
@@ -148,6 +152,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
@@ -159,17 +164,23 @@ namespace MSWadConsole20.Repository.DataAccess
                 var x = connection.Execute(
                    "[dbo].[sp_Library_Delete]",
                    parameters,
+                   transaction : transaction,
                    commandType: CommandType.StoredProcedure
                 );
 
                 response.ErrorCode = parameters.Get<int>("@ErrorCode");
                 response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+                if (response.ErrorCode == 0)
+                {
+                    transaction.Commit();
+                }
+
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
+            
             return response;
         }
     }

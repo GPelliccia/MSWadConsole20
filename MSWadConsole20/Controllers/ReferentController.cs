@@ -110,5 +110,23 @@ namespace MSWadConsole20.Controllers
             }
         }
 
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<StoredData>> ChiudiReferente(ReferentRequest request)
+        {
+            try
+            {
+                var response = _ReferentService.ChiudiReferente(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, null, 500);
+            }
+        }
+
     }
 }

@@ -109,5 +109,22 @@ namespace MSWadConsole20.Repository
             }
             return response;
         }
+
+        public ServiceResponse<StoredData> ChiudiReferente(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData>();
+            try
+            {
+                response.Data = _dataAccess.ChiudiReferente(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.Success = false;
+                response.UserMessage = response.Data?.ErrorMessage;
+            }
+            return response;
+        }
     }
 }

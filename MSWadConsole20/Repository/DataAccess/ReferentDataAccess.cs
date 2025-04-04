@@ -193,5 +193,40 @@ namespace MSWadConsole20.Repository.DataAccess
   
             return response;
         }
+
+        public StoredData ChiudiReferente(ReferentRequest request)
+        {
+            var response = new StoredData();
+
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var transaction = connection.BeginTransaction(); // Inizio transazione
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            try
+            {
+                var x = connection.Execute(
+                   "[dbo].[sp_ReferenteDelete]",
+                   parameters,
+                   transaction: transaction,
+                   commandType: CommandType.StoredProcedure
+                );
+
+                response.ErrorCode = parameters.Get<int>("@ErrorCode");
+                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+                if (response.ErrorCode == 0)
+                {
+                    transaction.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+            }
+            return response;
+        }
     }
 }

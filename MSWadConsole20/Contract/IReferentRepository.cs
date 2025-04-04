@@ -13,5 +13,6 @@ namespace MSWadConsole20.Contract
         ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request);
 
         ServiceResponse<StoredData> AggiornaReferente(ReferentRequest request);
+        ServiceResponse<StoredData> ChiudiReferente(ReferentRequest request);
     }
 }
