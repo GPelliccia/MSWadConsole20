@@ -1,4 +1,6 @@
-﻿namespace MSWadConsole20.Repository.DataModel
+﻿using Dapper;
+
+namespace MSWadConsole20.Repository.DataModel
 {
     public class StoredData
     {
@@ -19,5 +21,17 @@
 
             public StoredData() { }
             public StoredData(int errorCode, string errorMessage) : base(errorCode, errorMessage) { }
-        }    
+
+            public void SetErrorResponse(DynamicParameters parameters)
+            {
+                ErrorCode = parameters.Get<int>("@ErrorCode");
+                ErrorMessage = parameters.Get<string>("@ErrorMsg");
+            }
+            
+        public bool ThereIsNotError()
+        {
+            return ErrorCode == 0;
+        }
+
+    }    
 }

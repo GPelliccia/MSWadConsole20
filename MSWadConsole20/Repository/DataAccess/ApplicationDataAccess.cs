@@ -38,8 +38,8 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        commandType: CommandType.StoredProcedure
                                                        ))
             {
-                SetErrorResponse(response, parameters);
-                if(response.ErrorCode == 0)
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
                 {
                     response.Data = responseStored.ReadFirstOrDefault<WadApplicationData>() ?? new WadApplicationData();
 
@@ -80,8 +80,8 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        commandType: CommandType.StoredProcedure
                                                        ))
             {
-                SetErrorResponse(response, parameters);
-                if (response.ErrorCode != 0)
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
                 {
                     response.Data = responseStored.Read<WadApplicationData>().ToList();
                 }
@@ -107,8 +107,8 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        commandType: CommandType.StoredProcedure
                                                        ))
             {
-                SetErrorResponse(response, parameters);
-                if (response.ErrorCode == 0)
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
                 {
                     response.Data = responseStored.Read<ReferenteData>().ToList();
                 }
@@ -146,10 +146,6 @@ namespace MSWadConsole20.Repository.DataAccess
         }
 
 
-        private void SetErrorResponse<T>(StoredData<T> response, DynamicParameters parameters)
-        {
-            response.ErrorCode = parameters.Get<int>("@ErrorCode");
-            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
-        }
+
     }
 }
