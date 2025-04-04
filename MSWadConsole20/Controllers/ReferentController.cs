@@ -97,11 +97,11 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> AggiornaReferente(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredData>> UpdateReferent(ReferentRequest request)
         {
             try
             {
-                var response = _ReferentService.AggiornaReferente(request);
+                var response = _ReferentService.UpdateReferent(request);
                 return Ok();
             }
             catch (Exception ex)
@@ -115,11 +115,11 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> ChiudiReferente(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredData>> DeleteReferent(ReferentRequest request)
         {
             try
             {
-                var response = _ReferentService.ChiudiReferente(request);
+                var response = _ReferentService.DeleteReferent(request);
                 return Ok();
             }
             catch (Exception ex)

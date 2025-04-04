@@ -77,8 +77,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@NoteLibreria", request.NoteLibreria, DbType.String);
             parameters.Add("@FlagOffline", request.FlagOffline, DbType.Boolean);
             parameters.Add("@Contesto", request.Contesto, DbType.Int32);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
 
             var x = connection.Execute(
                 "[dbo].[sp_Library_Insert]",
@@ -87,11 +86,8 @@ namespace MSWadConsole20.Repository.DataAccess
                 commandType: CommandType.StoredProcedure
             );
 
-
-            response.ErrorCode = parameters.Get<int>("@ErrorCode");
-            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
-
-            if (response.ErrorCode == 0)
+            response.SetErrorResponse(parameters);
+            if (response.ThereIsNotError())
             {
                 transaction.Commit();
                 response.Data = parameters.Get<int>("@LibreriaApplicazioneID");
@@ -120,23 +116,21 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@DataFineAttivazione", request.DataFineAttivazione, DbType.DateTime);
             parameters.Add("@NoteLibreria", request.NoteLibreria, DbType.String);
             parameters.Add("@FlagOffline", request.FlagOffline, DbType.Boolean);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
+
             try
             {
                 var x = connection.Execute(
                     "[dbo].[sp_Library_Update]",
                     parameters,
-                    transaction : transaction,
+                    transaction: transaction,
                     commandType: CommandType.StoredProcedure
                 );
 
-                response.ErrorCode = parameters.Get<int>("@ErrorCode");
-                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
-                if (response.ErrorCode == 0)
-                {
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
                     transaction.Commit();
-                }
+
             }
             catch (Exception ex)
             {
@@ -157,8 +151,8 @@ namespace MSWadConsole20.Repository.DataAccess
 
             var parameters = new DynamicParameters();
             parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
+
             try
             {
                 var x = connection.Execute(
@@ -168,13 +162,9 @@ namespace MSWadConsole20.Repository.DataAccess
                    commandType: CommandType.StoredProcedure
                 );
 
-                response.ErrorCode = parameters.Get<int>("@ErrorCode");
-                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
-                if (response.ErrorCode == 0)
-                {
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
                     transaction.Commit();
-                }
-
             }
             catch (Exception ex)
             {
@@ -182,6 +172,11 @@ namespace MSWadConsole20.Repository.DataAccess
             }
             
             return response;
+        }
+        private void AddErrorParameters(DynamicParameters parameters)
+        {
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
         }
     }
 }

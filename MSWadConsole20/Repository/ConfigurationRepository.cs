@@ -56,7 +56,7 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nel recuperare la libreria");
                 response.Success = false;
                 response.UserMessage = "Non è possibile completare l'operazione.";
             }
@@ -73,7 +73,7 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nel recuperare le librerie");
                 response.Success = false;
                 response.UserMessage = "Non è possibile completare l'operazione.";
             }
@@ -90,7 +90,7 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nella creazione della libreria");
                 response.Success = false;
                 response.UserMessage = response.Data?.ErrorMessage;
             }
@@ -107,7 +107,7 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nella modifica della libreria");
                 response.Success = false;
                 response.UserMessage = response.Data?.ErrorMessage;
             }
@@ -124,7 +124,7 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nel disattivare la libreria");
                 response.Success = false;
                 response.UserMessage = response.Data?.ErrorMessage;
             }
