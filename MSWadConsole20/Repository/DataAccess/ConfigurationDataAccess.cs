@@ -1,11 +1,9 @@
 ﻿using Dapper;
 using MSWadConsole20.Repository.DataModel.Request;
 using MSWadConsole20.Repository.DataModel;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using MSWadConsole20.Repository.DataModel.Data;
+using Microsoft.Data.SqlClient;
 
 namespace MSWadConsole20.Repository.DataAccess
 {

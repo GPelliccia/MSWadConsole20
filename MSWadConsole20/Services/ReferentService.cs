@@ -1,4 +1,5 @@
-﻿using MSWadConsole20.Contract;
+﻿using Azure.Core;
+using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataModel;
 using MSWadConsole20.Repository.DataModel.Data;
 using MSWadConsole20.Repository.DataModel.Request;
@@ -16,7 +17,8 @@ namespace MSWadConsole20.Services
         }
 
         public ServiceResponse<StoredData<ReferenteData>> GetReferent(ReferentRequest request) => _repository.GetReferent(request);
-
         public ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request) => _repository.GetReferents(request);
+        public ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request) => _repository.GetTypeReferents(request);
+        public ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request) => _repository.InsertReferent(request);
     }
 }

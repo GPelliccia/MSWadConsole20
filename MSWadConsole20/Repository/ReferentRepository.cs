@@ -58,5 +58,39 @@ namespace MSWadConsole20.Repository
             }
             return response;
         }
+
+        public ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request)
+        {
+            var response = new ServiceResponse<StoredData<List<TipiReferenti>>>();
+            try
+            {
+                response.Data = _dataAccess.GetTypeReferents(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare i tipi dei referenti");
+                response.Success = false;
+                response.UserMessage = "Non è possibile completare l'operazione.";
+            }
+            return response;
+        }
+
+        public ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData<int>>();
+            try
+            {
+                response.Data = _dataAccess.InsertReferent(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.Success = false;
+                response.UserMessage = response.Data?.ErrorMessage;
+            }
+            return response;
+        }
     }
 }
