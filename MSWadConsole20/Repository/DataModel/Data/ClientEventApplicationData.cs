@@ -6,7 +6,7 @@ namespace MSWadConsole20.Repository.DataModel.Data
     {
 
         public int EventoID { get; set; }
-        public int ApplicazioneID { get; set; }
+        public int ApplicazioneId { get; set; }
         public string CodiceTipoEvento { get; set; }
         public string CodiceEvento { get; set; }
         public string DescrizioneEvento { get; set; }
