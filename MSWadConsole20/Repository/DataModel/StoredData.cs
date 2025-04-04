@@ -18,7 +18,6 @@ namespace MSWadConsole20.Repository.DataModel
             ErrorCode = parameters.Get<int>("@ErrorCode");
             ErrorMessage = parameters.Get<string>("@ErrorMsg");
         }
-
         public bool ThereIsNotError()
         {
             return ErrorCode == 0;
@@ -31,17 +30,5 @@ namespace MSWadConsole20.Repository.DataModel
 
         public StoredData() { }
         public StoredData(int errorCode, string errorMessage) : base(errorCode, errorMessage) { }
-        //public void SetErrorResponse(DynamicParameters parameters)
-        //{
-        //    ErrorCode = parameters.Get<int>("@ErrorCode");
-        //    ErrorMessage = parameters.Get<string>("@ErrorMsg");
-        //}
-            
-        //public bool ThereIsNotError()
-        //{
-        //    return ErrorCode == 0;
-        //}
-
-
     }    
 }
