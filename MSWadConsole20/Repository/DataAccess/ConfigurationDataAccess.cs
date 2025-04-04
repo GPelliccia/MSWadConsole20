@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using MSWadConsole20.Repository.DataModel.Data;
 
 namespace MSWadConsole20.Repository.DataAccess
 {

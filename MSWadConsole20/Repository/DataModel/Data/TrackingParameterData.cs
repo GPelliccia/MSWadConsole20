@@ -1,8 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MSWadConsole20.Repository.DataModel
+namespace MSWadConsole20.Repository.DataModel.Data
 {
-    public class TrackingParameterModel : ParameterModel
+    public class TrackingParameterData : ParameterData
     {
         public int ParametroTracciamentoId { get; set; }
         public int TracciamentoId { get; set; }

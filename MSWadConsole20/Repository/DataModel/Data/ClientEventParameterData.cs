@@ -1,8 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MSWadConsole20.Repository.DataModel
+namespace MSWadConsole20.Repository.DataModel.Data
 {
-    public class ClientEventParameterModel : ParameterModel
+    public class ClientEventParameterData : ParameterData
     {
         public int ParametroEventoId { get; set; }
         public int EventoId { get; set; }

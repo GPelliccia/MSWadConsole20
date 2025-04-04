@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace MSWadConsole20.Repository.DataModel
+namespace MSWadConsole20.Repository.DataModel.Data
 {
-    public class ParameterModel
+    public class ParameterData
     {
-        public String Codice
+        public string Codice
         {
             get
             {
@@ -17,14 +17,14 @@ namespace MSWadConsole20.Repository.DataModel
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    this._Codice = value.ToLower();
-                else this._Codice = value;
+                    _Codice = value.ToLower();
+                else _Codice = value;
             }
         }
         private string _Codice;
-        public String Valore { get; set; }
-        public String Descrizione { get; set; }
-        public String Note { get; set; }
+        public string Valore { get; set; }
+        public string Descrizione { get; set; }
+        public string Note { get; set; }
         public bool Obbligatorio { get; set; }
         public Tipo TipoParametro { get; set; }
         public UnitaMisura UnitaDiMisura { get; set; }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using MSWadConsole20.Repository.DataModel.Data;
 
 namespace MSWadConsole20.Repository
 {

@@ -4,6 +4,7 @@ using MSWadConsole20.Repository.DataModel;
 using System.Data;
 using System.Data.SqlClient;
 using Azure;
+using MSWadConsole20.Repository.DataModel.Data;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
@@ -16,9 +17,9 @@ namespace MSWadConsole20.Repository.DataAccess
             _connectionString = connectionString;
         }
 
-        public StoredData<ReferenteModel>? GetReferent(ReferentRequest request)
+        public StoredData<ReferenteData>? GetReferent(ReferentRequest request)
         {
-            StoredData<ReferenteModel> response = new StoredData<ReferenteModel>();
+            StoredData<ReferenteData> response = new StoredData<ReferenteData>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -31,7 +32,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
-            var referente = connection.QueryFirstOrDefault<ReferenteModel>(
+            var referente = connection.QueryFirstOrDefault<ReferenteData>(
                 "[dbo].[sp_ReferentiSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure
@@ -46,9 +47,9 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredData<List<ReferenteModel>>? GetReferents(ReferentRequest request)
+        public StoredData<List<ReferenteData>>? GetReferents(ReferentRequest request)
         {
-            StoredData<List<ReferenteModel>> response = new StoredData<List<ReferenteModel>>();
+            StoredData<List<ReferenteData>> response = new StoredData<List<ReferenteData>>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -61,7 +62,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
-            var listaReferenti = connection.Query<ReferenteModel>(
+            var listaReferenti = connection.Query<ReferenteData>(
                 "[dbo].[sp_ReferentiSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure

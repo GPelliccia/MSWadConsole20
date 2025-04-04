@@ -1,6 +1,7 @@
 ﻿using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataAccess;
 using MSWadConsole20.Repository.DataModel;
+using MSWadConsole20.Repository.DataModel.Data;
 using MSWadConsole20.Repository.DataModel.Request;
 using MSWadConsole20.Repository.DataModel.Response;
 
@@ -24,9 +25,9 @@ namespace MSWadConsole20.Repository
             _dataAccess = new ReferentDataAccess(_configuration["DB_CONNECTION"]);
         }
 
-        public ServiceResponse<StoredData<ReferenteModel>> GetReferent(ReferentRequest request)
+        public ServiceResponse<StoredData<ReferenteData>> GetReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData<ReferenteModel>>();
+            var response = new ServiceResponse<StoredData<ReferenteData>>();
             try
             {
                 response.Data = _dataAccess.GetReferent(request);
@@ -41,9 +42,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData<List<ReferenteModel>>> GetReferents(ReferentRequest request)
+        public ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData<List<ReferenteModel>>>();
+            var response = new ServiceResponse<StoredData<List<ReferenteData>>>();
             try
             {
                 response.Data = _dataAccess.GetReferents(request);

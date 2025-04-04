@@ -3,6 +3,7 @@ using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataModel.Request;
 using MSWadConsole20.Repository.DataModel.Response;
 using MSWadConsole20.Repository.DataModel;
+using MSWadConsole20.Repository.DataModel.Data;
 
 namespace MSWadConsole20.Controllers
 {

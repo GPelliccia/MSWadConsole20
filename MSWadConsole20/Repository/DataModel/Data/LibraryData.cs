@@ -1,4 +1,4 @@
-﻿namespace MSWadConsole20.Repository.DataModel
+﻿namespace MSWadConsole20.Repository.DataModel.Data
 {
     public class LibraryData
     {

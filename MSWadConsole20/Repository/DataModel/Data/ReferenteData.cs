@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MSWadConsole20.Repository.DataModel
+namespace MSWadConsole20.Repository.DataModel.Data
 {
-    public class ReferenteModel
+    public class ReferenteData
     {
         public int ReferenteId { get; set; }
         public string? Cognome { get; set; }

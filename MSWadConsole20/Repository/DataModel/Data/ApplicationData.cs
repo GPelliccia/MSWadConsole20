@@ -1,8 +1,9 @@
 ﻿using System.Runtime.Serialization;
+using MSWadConsole20.Repository.DataModel.Data;
 
 namespace MSWadConsole20.Repository.DataModel
 {
-    public class ApplicationModel
+    public class ApplicationData
     {
         public int ApplicazioneId { get; set; }
         public int LibreriaApplicazioneId { get; set; }
@@ -25,10 +26,10 @@ namespace MSWadConsole20.Repository.DataModel
         public bool OffLine { get; set; }
         public bool ConDisabilitati { get; set; }
         public int Contesto { get; set; }
-        public ApplicationParameterModel[] ParametroApplicazione { get; set; }
-        public ClientEventApplicationModel[] EventoClientApplicazione { get; set; }
-        public TrackingApplicationModel[] TracciamentoApplicazione { get; set; }
-        public ReferenteModel[] LstReferenti { get; set; }
+        public ApplicationParameterData[] ParametroApplicazione { get; set; }
+        public ClientEventApplicationData[] EventoClientApplicazione { get; set; }
+        public TrackingApplicationData[] TracciamentoApplicazione { get; set; }
+        public ReferenteData[] LstReferenti { get; set; }
         public string parametriApplicazioneReport { get; set; }
         public enum Ambiente
         {
