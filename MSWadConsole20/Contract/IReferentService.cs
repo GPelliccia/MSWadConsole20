@@ -8,7 +8,7 @@ namespace MSWadConsole20.Contract
     public interface IReferentService
     {
         ServiceResponse<StoredData<ReferenteData>> GetReferent(ReferentRequest request);
-
         ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request);
+        ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request);
     }
 }
