@@ -11,5 +11,7 @@ namespace MSWadConsole20.Contract
         ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request);
         ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request);
         ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request);
+
+        ServiceResponse<StoredData> AggiornaReferente(ReferentRequest request);
     }
 }

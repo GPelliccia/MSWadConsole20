@@ -148,5 +148,50 @@ namespace MSWadConsole20.Repository.DataAccess
 
             return response;
         }
+
+        public StoredData AggiornaReferente(ReferentRequest request)
+        {
+            var response = new StoredData();
+
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var transaction = connection.BeginTransaction(); // Inizio transazione
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@ReferenteId",request.ReferenteId, DbType.Int32);
+            parameters.Add("@Cognome", request.Cognome, DbType.String);
+            parameters.Add("@Nome", request.Nome, DbType.String);
+            parameters.Add("@Matricola", request.Matricola, DbType.String);
+            parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
+            parameters.Add("@Email", request.Email, DbType.String);
+            parameters.Add("@Telefono", request.Telefono, DbType.String);
+            parameters.Add("@Tipo", request.Tipo, DbType.String);
+            parameters.Add("@Utenza", request.Utenza, DbType.String);
+            parameters.Add("@DataInizioAttivazione", request.DataInizioAttivazione, DbType.DateTime);
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            try
+            {
+                var x = connection.Execute(
+                                "[dbo].[sp_ReferentiUpdate]",
+                                parameters,
+                                transaction : transaction,
+                                commandType: CommandType.StoredProcedure
+                );
+
+                response.ErrorCode = parameters.Get<int>("@ErrorCode");
+                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+                if ( response.ErrorCode == 0)
+                {
+                    transaction.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+            }
+  
+            return response;
+        }
     }
 }
