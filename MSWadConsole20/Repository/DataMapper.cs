@@ -2,6 +2,7 @@
 using MSWadConsole20.Repository.DataAccess.DataModel;
 using MSWadConsole20.Repository.DataAccess.DataModel.Data;
 using MSWadConsole20.Repository.DataAccess.DataModel.Response;
+using static MSWadConsole20.Repository.DataAccess.DataModel.Data.ParameterData;
 
 namespace MSWadConsole20.Repository
 {
@@ -42,5 +43,47 @@ namespace MSWadConsole20.Repository
                 DataFineAttivazione = response.DataFineAttivazione,
             };
         }
+
+        public static ReferentModel ToReferentModel(this ReferenteData response)
+        {
+            return new ReferentModel
+            {
+                Id = response.ReferenteId,
+                Cognome = response.Cognome,
+                Nome = response.Nome,
+                Matricola = response.Matricola,
+                CodiceFiscale = response.CodiceFiscale,
+                Email = response.Email,
+                Telefono = response.Telefono,
+                Tipo = response.Tipo,
+                Utenza = response.Utenza,
+                DataInizioAttivazione = response.DataInizioAttivazione,
+                DataFineAttivazione = response.DataInizioAttivazione,
+                FlagDirigente = response.FlagDirigente,
+                FlagDisabilitati = response.ConDisabilitati,
+            };
+        }
+
+        public static TipoReferenteModel ToTipiReferentiModel(this TipoReferenteData response)
+        {
+            return new TipoReferenteModel
+            {
+                Id = response.TipoReferenteID,
+                Nome = response.Nome,
+                Abbreviazione = response.Abbreviazione,
+            };
+        }
+
+        public static AmbienteModel ToAmbienteModel(this AmbienteData response)
+        {
+            return new AmbienteModel
+            {
+                Id = response.AmbienteId,
+                Descrizione = response.Descrizione,
+            };
+        }
+
+
+
     }
 }

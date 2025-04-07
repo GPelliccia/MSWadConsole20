@@ -16,7 +16,6 @@ namespace MSWadConsole20.Contract.BusinessModel
         public DateTime? DataInizioAttivazione { get; set; }
         public DateTime? DataFineAttivazione { get; set; }
         public bool FlagDirigente { get; set; }
-        [NotMapped]
         public bool FlagDisabilitati { get; set; }
     }
 }

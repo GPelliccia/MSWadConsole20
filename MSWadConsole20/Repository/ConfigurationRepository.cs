@@ -23,19 +23,19 @@ namespace MSWadConsole20.Repository
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigurationRepository(IConfiguration configuration, ILogger<ConfigurationRepository> logger)
+        public ConfigurationRepository(IConfiguration configuration, ILogger<ConfigurationRepository> logger, ConfigurationDataAccess dataAccess)
         {
             _configuration = configuration;
             _logger = logger;
-            _dataAccess = new ConfigurationDataAccess(_configuration["DB_CONNECTION"]);
+            _dataAccess = dataAccess;
         }
 
-        public ServiceResponse<List<AmbienteData>?> GetAmbiente()
+        public ServiceResponse<List<AmbienteModel>?> GetAmbiente()
         {
-            var response = new ServiceResponse<List<AmbienteData>?>();
+            var response = new ServiceResponse<List<AmbienteModel>?>();
             try
             {
-                response.Data = _dataAccess.GetAmbiente();
+                response.Data = _dataAccess.GetAmbiente()?.Select(s => s.ToAmbienteModel()).ToList();
                 response.Success = true;
             }
             catch (Exception ex)
@@ -47,12 +47,12 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<LibraryData?> GetLibrary(LibraryRequest request)
+        public ServiceResponse<LibraryModel?> GetLibrary(LibraryRequest request)
         {
-            var response = new ServiceResponse<LibraryData?>();
+            var response = new ServiceResponse<LibraryModel?>();
             try
             {
-                response.Data = _dataAccess.GetLibrary(request);
+                response.Data = _dataAccess?.GetLibrary(request)?.ToLibraryModel();
                 response.Success = true;
             }
             catch (Exception ex)
