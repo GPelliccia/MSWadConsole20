@@ -1,13 +1,9 @@
 ﻿using Dapper;
-using MSWadConsole20.Repository.DataModel.Request;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel;
-using Azure;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
@@ -141,13 +137,13 @@ namespace MSWadConsole20.Repository.DataAccess
         }
 
 
-        public StoredData<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
+        public StoredResponse<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
         {
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             AddErrorParameters(parameters);
-            var response = new StoredData<ApplicationData>();
+            var response = new StoredResponse<ApplicationData>();
 
             using (var responseStored = connection.QueryMultiple("[dbo].[sp_ApplicazioniSelectReport]",
                                            parameters,
@@ -155,7 +151,7 @@ namespace MSWadConsole20.Repository.DataAccess
                                            ))
             {
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                 {
                     response.Data = responseStored.ReadFirstOrDefault<ApplicationData>() ?? new ApplicationData();
 

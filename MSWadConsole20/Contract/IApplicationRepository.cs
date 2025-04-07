@@ -1,6 +1,6 @@
-﻿using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel.Request.ApplicationModel;
+﻿using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
+using MSWadConsole20.Repository.DataModel;
 using MSWadConsole20.Repository.DataModel.Response;
 
 namespace MSWadConsole20.Contract
