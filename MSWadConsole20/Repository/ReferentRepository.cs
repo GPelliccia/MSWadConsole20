@@ -59,9 +59,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredResponse<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request)
+        public ServiceResponse<StoredResponse<List<TipiReferentiData>>> GetTypeReferents(TipiReferentiRequest request)
         {
-            var response = new ServiceResponse<StoredResponse<List<TipiReferenti>>>();
+            var response = new ServiceResponse<StoredResponse<List<TipiReferentiData>>>();
             try
             {
                 response.Data = _dataAccess.GetTypeReferents(request);

@@ -18,7 +18,7 @@ namespace MSWadConsole20.Services
 
         public ServiceResponse<StoredResponse<ReferenteData>> GetReferent(ReferentRequest request) => _repository.GetReferent(request);
         public ServiceResponse<StoredResponse<List<ReferenteData>>> GetReferents(ReferentRequest request) => _repository.GetReferents(request);
-        public ServiceResponse<StoredResponse<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request) => _repository.GetTypeReferents(request);
+        public ServiceResponse<StoredResponse<List<TipiReferentiData>>> GetTypeReferents(TipiReferentiRequest request) => _repository.GetTypeReferents(request);
         public ServiceResponse<StoredResponse<int>> InsertReferent(ReferentRequest request) => _repository.InsertReferent(request);
         public ServiceResponse<StoredResponse> UpdateReferent(ReferentRequest request) => _repository.AggiornaReferente(request);
         public ServiceResponse<StoredResponse> DeleteReferent(ReferentRequest request) => _repository.DeleteReferent(request);

@@ -60,9 +60,9 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredResponse<List<TipiReferenti>>? GetTypeReferents(TipiReferentiRequest request)
+        public StoredResponse<List<TipiReferentiData>>? GetTypeReferents(TipiReferentiRequest request)
         {
-            StoredResponse<List<TipiReferenti>> response = new StoredResponse<List<TipiReferenti>>();
+            StoredResponse<List<TipiReferentiData>> response = new StoredResponse<List<TipiReferentiData>>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -71,7 +71,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@Abbreviazione", request.Abbreviazione, DbType.String);
             AddErrorParameters(parameters);
 
-            var tipiReferenti = connection.Query<TipiReferenti>(
+            var tipiReferenti = connection.Query<TipiReferentiData>(
                 "[dbo].[sp_ReferentTypeSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure

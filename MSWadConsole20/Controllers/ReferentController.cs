@@ -61,7 +61,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredResponse<List<TipiReferenti>>>> GetTypeReferents(TipiReferentiRequest request)
+        public ActionResult<ServiceResponse<StoredResponse<List<TipiReferentiData>>>> GetTypeReferents(TipiReferentiRequest request)
         {
             try
             {

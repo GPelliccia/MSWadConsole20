@@ -9,7 +9,7 @@ namespace MSWadConsole20.Contract
     {
         ServiceResponse<StoredResponse<ReferenteData>> GetReferent(ReferentRequest request);
         ServiceResponse<StoredResponse<List<ReferenteData>>> GetReferents(ReferentRequest request);
-        ServiceResponse<StoredResponse<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request);
+        ServiceResponse<StoredResponse<List<TipiReferentiData>>> GetTypeReferents(TipiReferentiRequest request);
         ServiceResponse<StoredResponse<int>> InsertReferent(ReferentRequest request);
         ServiceResponse<StoredResponse> UpdateReferent(ReferentRequest request);
         ServiceResponse<StoredResponse> DeleteReferent(ReferentRequest request);
