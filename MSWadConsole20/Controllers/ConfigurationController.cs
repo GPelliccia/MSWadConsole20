@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSWadConsole20.Contract;
+using MSWadConsole20.Contract.BusinessModel;
 using MSWadConsole20.Repository.DataAccess.DataModel;
 using MSWadConsole20.Repository.DataAccess.DataModel.Data;
 using MSWadConsole20.Repository.DataAccess.DataModel.Request;
@@ -24,7 +25,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<List<AmbienteData>?>> GetAmbiente(ConfigurationRequest req)
+        public ActionResult<ServiceResponse<List<AmbienteModel>?>> GetAmbiente(ConfigurationRequest req)
         {
             try
             {
@@ -42,7 +43,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<LibraryData?>> GetLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse<LibraryModel?>> GetLibrary(LibraryRequest request)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<List<LibraryData>?>> GetLibraries(LibraryRequest request)
+        public ActionResult<ServiceResponse<List<LibraryModel>?>> GetLibraries(LibraryRequest request)
         {
             try
             {
@@ -98,7 +99,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredResponse>> UpdateLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse> UpdateLibrary(LibraryRequest request)
         {
             try
             {
@@ -118,7 +119,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredResponse>> DeleteLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse> DeleteLibrary(LibraryRequest request)
         {
             try
             {

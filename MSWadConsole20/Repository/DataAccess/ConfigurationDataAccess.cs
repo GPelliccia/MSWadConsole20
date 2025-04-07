@@ -28,11 +28,14 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@Contesto", request.Contesto, DbType.String);
             parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
 
-            return Connection.QueryFirstOrDefault<LibraryData>(
+            var result = Connection.QueryFirstOrDefault<LibraryData>(
                 "[dbo].[sp_Library_Select]",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+
+            Dispose();
+            return result;
         }
 
         public List<LibraryData>? GetLibraries(LibraryRequest request)
@@ -46,14 +49,14 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@Contesto", request.Contesto, DbType.String);
             parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
 
-            var data = Connection.Query<LibraryData>(
+            var result = Connection.Query<LibraryData>(
                 "[dbo].[sp_Library_Select]",
                 parameters,
                 commandType: CommandType.StoredProcedure
             ).AsList();
 
             Dispose();
-            return data;
+            return result;
         }
 
         public StoredResponse<int> InsertLibrary(LibraryRequest request)
@@ -164,6 +167,8 @@ namespace MSWadConsole20.Repository.DataAccess
                 response.SetErrorResponse(parameters);
                 if (response.Success)
                     Commit();
+                else
+                    Rollback();
             }
             catch (Exception)
             {

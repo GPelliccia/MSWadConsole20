@@ -1,4 +1,5 @@
 ﻿using MSWadConsole20.Contract;
+using MSWadConsole20.Contract.BusinessModel;
 using MSWadConsole20.Repository.DataAccess;
 using MSWadConsole20.Repository.DataAccess.DataModel;
 using MSWadConsole20.Repository.DataAccess.DataModel.Data;
@@ -18,111 +19,122 @@ namespace MSWadConsole20.Repository
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        public ReferentRepository(IConfiguration configuration, ILogger<ReferentRepository> logger)
+        public ReferentRepository(IConfiguration configuration, ILogger<ReferentRepository> logger, ReferentDataAccess dataAccess)
         {
             _configuration = configuration;
             _logger = logger;
-            _dataAccess = new ReferentDataAccess(_configuration["DB_CONNECTION"]);
+            _dataAccess = dataAccess;
         }
 
-        public ServiceResponse<StoredResponse<ReferenteData>> GetReferent(ReferentRequest request)
+        public ServiceResponse<ReferentModel> GetReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredResponse<ReferenteData>>();
+            var response = new ServiceResponse<ReferentModel>();
             try
             {
-                response.Data = _dataAccess.GetReferent(request);
+                var storedResponse = _dataAccess.GetReferent(request);
+                var referentModel = storedResponse?.Data?.ToReferentModel();
+                response.Data = referentModel;
                 response.Success = true;
+                response.ErrorMessage = storedResponse?.ErrorMessage;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel recuperare il referente");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredResponse<List<ReferenteData>>> GetReferents(ReferentRequest request)
+        public ServiceResponse<List<ReferentModel>> GetReferents(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredResponse<List<ReferenteData>>>();
+            var response = new ServiceResponse<List<ReferentModel>>();
             try
             {
-                response.Data = _dataAccess.GetReferents(request);
+                var storedResponse = _dataAccess?.GetReferents(request);
+                var listReferent = storedResponse?.Data?.Select(s => s.ToReferentModel()).ToList();
+                response.Data = listReferent;
                 response.Success = true;
+                response.ErrorMessage = storedResponse?.ErrorMessage;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel recuperare i referenti");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredResponse<List<TipiReferentiData>>> GetTypeReferents(TipiReferentiRequest request)
+        public ServiceResponse<List<TipoReferenteModel>> GetTypeReferents(TipiReferentiRequest request)
         {
-            var response = new ServiceResponse<StoredResponse<List<TipiReferentiData>>>();
+            var response = new ServiceResponse<List<TipoReferenteModel>>();
             try
             {
-                response.Data = _dataAccess.GetTypeReferents(request);
+                var storedResponse = _dataAccess?.GetTypeReferents(request);
+                response.Data = storedResponse?.Data?.Select(s => s.ToTipiReferentiModel()).ToList();
                 response.Success = true;
+                response.ErrorMessage = storedResponse?.ErrorMessage;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel recuperare i tipi dei referenti");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredResponse<int>> InsertReferent(ReferentRequest request)
+        public ServiceResponse<int> InsertReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredResponse<int>>();
+            var response = new ServiceResponse<int>();
             try
             {
-                response.Data = _dataAccess.InsertReferent(request);
+                var storedResponse = _dataAccess.InsertReferent(request);
+                response = storedResponse.ToServiceResponse();
                 response.Success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nella creazione del referente");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredResponse> UpdateReferent(ReferentRequest request)
+        public ServiceResponse UpdateReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredResponse>();
+            var response = new ServiceResponse();
             try
             {
-                response.Data = _dataAccess.UpdateReferent(request);
+                var storedResponse = _dataAccess.UpdateReferent(request);
+                response = storedResponse.ToServiceResponse() ?? new ServiceResponse();
                 response.Success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel modificare il referente");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredResponse> DeleteReferent(ReferentRequest request)
+        public ServiceResponse DeleteReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredResponse>();
+            var response = new ServiceResponse();
             try
             {
-                response.Data = _dataAccess.ChiudiReferente(request);
+                var storedResponse = _dataAccess.ChiudiReferente(request);
+                response = storedResponse.ToServiceResponse() ?? new ServiceResponse();
                 response.Success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel disattivare il referente");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }

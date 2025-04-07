@@ -4,28 +4,25 @@ using Microsoft.Data.SqlClient;
 using MSWadConsole20.Repository.DataAccess.DataModel;
 using MSWadConsole20.Repository.DataAccess.DataModel.Data;
 using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.Connection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
-    public class ReferentDataAccess
+    public class ReferentDataAccess : BaseDataAccess
     {
-        private readonly string _connectionString;
 
-        public ReferentDataAccess(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public ReferentDataAccess(IConnectionFactory connectionFactory) : base(connectionFactory) { }
 
         public StoredResponse<ReferenteData>? GetReferent(ReferentRequest request)
         {
             StoredResponse<ReferenteData> response = new StoredResponse<ReferenteData>();
 
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);           
             AddErrorParameters(parameters);
 
-            var referente = connection.QueryFirstOrDefault<ReferenteData>(
+            var referente = Connection.QueryFirstOrDefault<ReferenteData>(
                 "[dbo].[sp_ReferentiSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure
@@ -42,12 +39,11 @@ namespace MSWadConsole20.Repository.DataAccess
         {
             StoredResponse<List<ReferenteData>> response = new StoredResponse<List<ReferenteData>>();
 
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();            
             parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Int32);
             AddErrorParameters(parameters);
 
-            var listaReferenti = connection.Query<ReferenteData>(
+            var listaReferenti = Connection.Query<ReferenteData>(
                 "[dbo].[sp_ReferentiSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure
@@ -60,18 +56,17 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredResponse<List<TipiReferentiData>>? GetTypeReferents(TipiReferentiRequest request)
+        public StoredResponse<List<TipoReferenteData>>? GetTypeReferents(TipiReferentiRequest request)
         {
-            StoredResponse<List<TipiReferentiData>> response = new StoredResponse<List<TipiReferentiData>>();
+            StoredResponse<List<TipoReferenteData>> response = new StoredResponse<List<TipoReferenteData>>();
 
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@TipoReferenteID", request.TipoReferenteID, DbType.Int32);
             parameters.Add("@Nome", request.Nome, DbType.String);
             parameters.Add("@Abbreviazione", request.Abbreviazione, DbType.String);
             AddErrorParameters(parameters);
 
-            var tipiReferenti = connection.Query<TipiReferentiData>(
+            var tipiReferenti = Connection.Query<TipoReferenteData>(
                 "[dbo].[sp_ReferentTypeSelect]",
                 parameters,
                 commandType: CommandType.StoredProcedure
@@ -87,54 +82,55 @@ namespace MSWadConsole20.Repository.DataAccess
         public StoredResponse<int> InsertReferent(ReferentRequest request)
         {
             var response = new StoredResponse<int>();
-
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-            using var transaction = connection.BeginTransaction(); // Inizio transazione
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@ReferenteId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@Cognome", request.Cognome, DbType.String);
-            parameters.Add("@Nome", request.Nome, DbType.String);
-            parameters.Add("@Matricola", request.Matricola, DbType.String);
-            parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
-            parameters.Add("@Email", request.Email, DbType.String);
-            parameters.Add("@Telefono", request.Telefono, DbType.String);
-            parameters.Add("@Tipo", request.Tipo, DbType.String);
-            parameters.Add("@Utenza", request.Utenza, DbType.String);
-            parameters.Add("@DataInizioAttivazione", request.DataInizioAttivazione, DbType.DateTime);
-            AddErrorParameters(parameters);
-
-            var x = connection.Execute(
-                "[dbo].[sp_ReferentiInsert]",
-                parameters,
-                transaction: transaction,
-                commandType: CommandType.StoredProcedure
-            );
-
-
-            response.SetErrorResponse(parameters);
-            if (response.Success)
+            try
             {
-                transaction.Commit();
-                response.Data = parameters.Get<int>("@ReferenteId");
+                var parameters = new DynamicParameters();
+                parameters.Add("@ReferenteId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@Cognome", request.Cognome, DbType.String);
+                parameters.Add("@Nome", request.Nome, DbType.String);
+                parameters.Add("@Matricola", request.Matricola, DbType.String);
+                parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
+                parameters.Add("@Email", request.Email, DbType.String);
+                parameters.Add("@Telefono", request.Telefono, DbType.String);
+                parameters.Add("@Tipo", request.Tipo, DbType.String);
+                parameters.Add("@Utenza", request.Utenza, DbType.String);
+                parameters.Add("@DataInizioAttivazione", request.DataInizioAttivazione, DbType.DateTime);
+                AddErrorParameters(parameters);
+
+                var x = Connection.Execute(
+                    "[dbo].[sp_ReferentiInsert]",
+                    parameters,
+                    transaction: Transaction,
+                    commandType: CommandType.StoredProcedure
+                );
+
+
+                response.SetErrorResponse(parameters);
+                if (response.Success)
+                {
+                    response.Data = parameters.Get<int>("@ReferenteId");
+                    Commit();
+                }
+                else
+                {
+                    Rollback();
+                }
             }
-            else
+            catch (Exception)
             {
-                transaction.Rollback();
-            }            
-
+                Rollback();
+                throw;
+            }
+            finally
+            {
+                Dispose();
+            }
             return response;
         }
 
         public StoredResponse UpdateReferent(ReferentRequest request)
         {
             var response = new StoredResponse();
-
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-            using var transaction = connection.BeginTransaction(); // Inizio transazione
-
             var parameters = new DynamicParameters();
             parameters.Add("@ReferenteId",request.ReferenteId, DbType.Int32);
             parameters.Add("@Cognome", request.Cognome, DbType.String);
@@ -149,20 +145,27 @@ namespace MSWadConsole20.Repository.DataAccess
             AddErrorParameters(parameters);
             try
             {
-                var x = connection.Execute(
-                                "[dbo].[sp_ReferentiUpdate]",
-                                parameters,
-                                transaction : transaction,
-                                commandType: CommandType.StoredProcedure
+                var x = Connection.Execute(
+                    "[dbo].[sp_ReferentiUpdate]",
+                    parameters,
+                    transaction : Transaction,
+                    commandType: CommandType.StoredProcedure
                 );
 
                 response.SetErrorResponse(parameters);
                 if (response.Success)
-                    transaction.Commit();
+                    Commit();
+                else
+                    Rollback();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                transaction.Rollback();
+                Rollback();
+                throw;
+            }
+            finally
+            {
+                Dispose();
             }
   
             return response;
@@ -171,30 +174,32 @@ namespace MSWadConsole20.Repository.DataAccess
         public StoredResponse ChiudiReferente(ReferentRequest request)
         {
             var response = new StoredResponse();
-
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-            using var transaction = connection.BeginTransaction(); // Inizio transazione
-
             var parameters = new DynamicParameters();
             parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);
             AddErrorParameters(parameters);
             try
             {
-                var x = connection.Execute(
+                var x = Connection.Execute(
                    "[dbo].[sp_ReferenteDelete]",
                    parameters,
-                   transaction: transaction,
+                   transaction: Transaction,
                    commandType: CommandType.StoredProcedure
                 );
 
                 response.SetErrorResponse(parameters);
                 if (response.Success)
-                    transaction.Commit();
+                    Commit();
+                else
+                    Rollback();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                transaction.Rollback();
+                Rollback();
+                throw;
+            }
+            finally
+            {
+                Dispose();
             }
             return response;
         }
