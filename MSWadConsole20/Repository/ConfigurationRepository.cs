@@ -23,6 +23,7 @@ namespace MSWadConsole20.Repository
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
+        
         public ConfigurationRepository(IConfiguration configuration, ILogger<ConfigurationRepository> logger, ConfigurationDataAccess dataAccess)
         {
             _configuration = configuration;
