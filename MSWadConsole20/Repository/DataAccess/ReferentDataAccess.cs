@@ -22,12 +22,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
-            parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);
-            parameters.Add("@Cognome", request.Cognome, DbType.String);
-            parameters.Add("@Nome", request.Nome, DbType.String);
-            parameters.Add("@Tipo", request.Tipo, DbType.String);
-            parameters.Add("@Utenza", request.Utenza, DbType.String);
-            parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Boolean);
+            parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);           
             AddErrorParameters(parameters);
 
             var referente = connection.QueryFirstOrDefault<ReferenteData>(
@@ -48,12 +43,7 @@ namespace MSWadConsole20.Repository.DataAccess
             StoredData<List<ReferenteData>> response = new StoredData<List<ReferenteData>>();
 
             using var connection = new SqlConnection(_connectionString);
-            var parameters = new DynamicParameters();
-            parameters.Add("@ReferenteID", request.ReferenteId, DbType.Int32);
-            parameters.Add("@Cognome", request.Cognome, DbType.String);
-            parameters.Add("@Nome", request.Nome, DbType.String);
-            parameters.Add("@Tipo", request.Tipo, DbType.String);
-            parameters.Add("@Utenza", request.Utenza, DbType.String);
+            var parameters = new DynamicParameters();            
             parameters.Add("@ConDisabilitati", request.ConDisabilitati, DbType.Int32);
             AddErrorParameters(parameters);
 

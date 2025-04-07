@@ -20,7 +20,7 @@ namespace MSWadConsole20.Services
         public ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request) => _repository.GetReferents(request);
         public ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request) => _repository.GetTypeReferents(request);
         public ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request) => _repository.InsertReferent(request);
-        public ServiceResponse<StoredData> UpdateReferent(ReferentRequest request) => _repository.AggiornaReferente(request);
+        public ServiceResponse<StoredData> UpdateReferent(ReferentRequest request) => _repository.UpdateReferent(request);
         public ServiceResponse<StoredData> DeleteReferent(ReferentRequest request) => _repository.DeleteReferent(request);
     }
 }

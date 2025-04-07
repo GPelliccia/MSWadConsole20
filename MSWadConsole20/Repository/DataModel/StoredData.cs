@@ -15,7 +15,7 @@ namespace MSWadConsole20.Repository.DataModel
         }
         public void SetErrorResponse(DynamicParameters parameters)
         {
-            ErrorCode = parameters.Get<int>("@ErrorCode");
+            ErrorCode = parameters.Get<int?>("@ErrorCode") ?? 0;
             ErrorMessage = parameters.Get<string>("@ErrorMsg");
         }
         public bool ThereIsNotError()
