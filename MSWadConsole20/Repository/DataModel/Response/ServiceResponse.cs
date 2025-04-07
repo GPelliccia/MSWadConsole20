@@ -1,4 +1,4 @@
-﻿using Azure;
+﻿using MSWadConsole20.Repository.DataAccess.DataModel;
 
 namespace MSWadConsole20.Repository.DataModel.Response
 {
@@ -11,11 +11,11 @@ namespace MSWadConsole20.Repository.DataModel.Response
 
         public ServiceResponse() { }
 
-        public void SetServiceResponseFromStoredData(StoredData<T> storedData)
+        public void SetServiceResponseFromStoredData(StoredResponse<T> storedData)
         {
             Data = storedData.Data;
             ErrorCode = storedData.ErrorCode.HasValue ? storedData.ErrorCode.Value : 0;
-            Success = storedData.ThereIsNotError();
+            Success = storedData.Success;
             UserMessage = storedData.ErrorMessage;
         }
 
