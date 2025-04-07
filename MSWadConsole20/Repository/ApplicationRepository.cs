@@ -1,9 +1,10 @@
 ﻿using Azure.Core;
 using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataAccess;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
 using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel.Request.ApplicationModel;
+
 using MSWadConsole20.Repository.DataModel.Response;
 
 namespace MSWadConsole20.Repository
@@ -23,41 +24,29 @@ namespace MSWadConsole20.Repository
 
         public ServiceResponse<WadApplicationData> GetApplication(ApplicationModelRequest request)
         {
-            return ExecuteDataAccessMethod<WadApplicationData, ApplicationModelRequest>(_dataAccess.GetApplication, request);
+            var response = new ServiceResponse<WadApplicationData>();
+            try
+            {
+                var result = _dataAccess.GetApplication(request);
+                response.SetServiceResponseFromStoredData(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.SetErrorOnCompletOperation();
+            }
+            return response;
+
+
         }
 
         public ServiceResponse<List<WadApplicationData>> GetApplications(ApplicationModelRequest request)
         {
-            return ExecuteDataAccessMethod<List<WadApplicationData>, ApplicationModelRequest>(_dataAccess.GetApplications, request);
-        }
 
-        public ServiceResponse<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
-        {
-            return ExecuteDataAccessMethod<ApplicationData, ApplicationModelRequest>(_dataAccess.GetApplicazioneReport, request);
-        }
-
-        public ServiceResponse<List<ReferenteData>> GetApplicationReferents(ApplicationModelRequest request)
-        {
-            return ExecuteDataAccessMethod<List<ReferenteData>, ApplicationModelRequest>(_dataAccess.GetApplicationReferents, request);
-        }
-
-        public ServiceResponse<List<ApplicationTipologyData>> GetTipologieApplicazione()
-        {
-            return ExecuteDataAccessMethod<List<ApplicationTipologyData>>(_dataAccess.GetTipologieApplicazione);
-        }
-
-        public ServiceResponse<List<ApplicationVisibilityData>> GetVisibilitaApplicazione()
-        {
-            return ExecuteDataAccessMethod<List<ApplicationVisibilityData>>(_dataAccess.GetVisibilitaApplicazione);
-        }
-
-
-        private ServiceResponse<T> ExecuteDataAccessMethod<T,K>(Func<K, StoredData<T>> method, K request)
-        { 
-            var response = new ServiceResponse<T>();
+            var response = new ServiceResponse<List<WadApplicationData>>();
             try
             {
-                var result = method(request);
+                var result = _dataAccess.GetApplications(request);
                 response.SetServiceResponseFromStoredData(result);
             }
             catch (Exception ex)
@@ -68,13 +57,60 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-
-        private ServiceResponse<T> ExecuteDataAccessMethod<T>(Func<StoredData<T>> method)
+        public ServiceResponse<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
         {
-            var response = new ServiceResponse<T>();
+            var response = new ServiceResponse<ApplicationData>();
             try
             {
-                var result = method();
+                var result = _dataAccess.GetApplicazioneReport(request);
+                response.SetServiceResponseFromStoredData(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.SetErrorOnCompletOperation();
+            }
+            return response;        
+        }
+
+        public ServiceResponse<List<ReferenteData>> GetApplicationReferents(ApplicationModelRequest request)
+        {
+            var response = new ServiceResponse<List<ReferenteData>>();
+            try
+            {
+                var result = _dataAccess.GetApplicationReferents(request);
+                response.SetServiceResponseFromStoredData(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.SetErrorOnCompletOperation();
+            }
+            return response;
+        }
+
+        public ServiceResponse<List<ApplicationTipologyData>> GetTipologieApplicazione()
+        {
+            var response = new ServiceResponse<List<ApplicationTipologyData>>();
+            try
+            {
+                var result = _dataAccess.GetTipologieApplicazione();
+                response.SetServiceResponseFromStoredData(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                response.SetErrorOnCompletOperation();
+            }
+            return response;
+        }
+
+        public ServiceResponse<List<ApplicationVisibilityData>> GetVisibilitaApplicazione()
+        {
+            var response = new ServiceResponse<List<ApplicationVisibilityData>>();
+            try
+            {
+                var result = _dataAccess.GetVisibilitaApplicazione();
                 response.SetServiceResponseFromStoredData(result);
             }
             catch (Exception ex)

@@ -1,29 +1,22 @@
 ﻿using Dapper;
-using MSWadConsole20.Repository.DataModel.Request;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel;
-using Azure;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
+using MSWadConsole20.Repository.Connection;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
-    public class ApplicationDataAccess
+    public class ApplicationDataAccess : BaseDataAccess
     {
         private readonly string _connectionString;
 
-        public ApplicationDataAccess(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public ApplicationDataAccess(IConnectionFactory connectionFactory) : base(connectionFactory) { }
 
 
         public StoredResponse<WadApplicationData> GetApplication(ApplicationModelRequest request)
         {
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             parameters.Add("@CodiceFiscale", request.CodiceFiscaleUtente, DbType.String);
@@ -33,7 +26,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
 
 
-            using (var responseStored = connection.QueryMultiple("[dbo].[sp_ApplicazioniSelect]",
+            using (var responseStored = Connection.QueryMultiple("[dbo].[sp_ApplicazioniSelect]",
                                                        parameters,
                                                        commandType: CommandType.StoredProcedure
                                                        ))
@@ -61,7 +54,6 @@ namespace MSWadConsole20.Repository.DataAccess
 
         public StoredResponse<List<WadApplicationData>> GetApplications(ApplicationModelRequest request)
         {
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             parameters.Add("@CodiceFiscale", request.CodiceFiscaleUtente, DbType.String);
@@ -76,7 +68,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
 
 
-            using (var responseStored = connection.QueryMultiple("[dbo].[sp_ApplicazioniSelect]",
+            using (var responseStored = Connection.QueryMultiple("[dbo].[sp_ApplicazioniSelect]",
                                                        parameters,
                                                        commandType: CommandType.StoredProcedure
                                                        ))
@@ -94,7 +86,6 @@ namespace MSWadConsole20.Repository.DataAccess
 
         public StoredResponse<List<ReferenteData>> GetApplicationReferents(ApplicationModelRequest request)
         {
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             AddErrorParameters(parameters);
@@ -103,7 +94,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
 
 
-            using (var responseStored = connection.QueryMultiple("[dbo].[sp_AppRefSelect]",
+            using (var responseStored = Connection.QueryMultiple("[dbo].[sp_AppRefSelect]",
                                                        parameters,
                                                        commandType: CommandType.StoredProcedure
                                                        ))
@@ -120,10 +111,9 @@ namespace MSWadConsole20.Repository.DataAccess
 
         public StoredResponse<List<ApplicationTipologyData>> GetTipologieApplicazione()
         {
-            using var connection = new SqlConnection(_connectionString);
             var response = new StoredResponse<List<ApplicationTipologyData>>();
 
-            var responseStored = connection.Query<ApplicationTipologyData>("[dbo].[sp_GetTipologieApplicazione]", commandType: CommandType.StoredProcedure).AsList();
+            var responseStored = Connection.Query<ApplicationTipologyData>("[dbo].[sp_GetTipologieApplicazione]", commandType: CommandType.StoredProcedure).AsList();
             
             response.Data = responseStored;
             return response;
@@ -131,31 +121,29 @@ namespace MSWadConsole20.Repository.DataAccess
 
         public StoredResponse<List<ApplicationVisibilityData>> GetVisibilitaApplicazione()
         {
-            using var connection = new SqlConnection(_connectionString);
             var response = new StoredResponse<List<ApplicationVisibilityData>>();
 
-            var responseStored = connection.Query<ApplicationVisibilityData>("[dbo].[sp_GetVisibilitaApplicazione]", commandType: CommandType.StoredProcedure).AsList();
+            var responseStored = Connection.Query<ApplicationVisibilityData>("[dbo].[sp_GetVisibilitaApplicazione]", commandType: CommandType.StoredProcedure).AsList();
 
             response.Data = responseStored;
             return response;
         }
 
 
-        public StoredData<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
+        public StoredResponse<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
         {
-            using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             AddErrorParameters(parameters);
-            var response = new StoredData<ApplicationData>();
+            var response = new StoredResponse<ApplicationData>();
 
-            using (var responseStored = connection.QueryMultiple("[dbo].[sp_ApplicazioniSelectReport]",
+            using (var responseStored = Connection.QueryMultiple("[dbo].[sp_ApplicazioniSelectReport]",
                                            parameters,
                                            commandType: CommandType.StoredProcedure
                                            ))
             {
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                 {
                     response.Data = responseStored.ReadFirstOrDefault<ApplicationData>() ?? new ApplicationData();
 
