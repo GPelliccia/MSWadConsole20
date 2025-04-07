@@ -5,9 +5,9 @@ using System.Data;
 using System.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataAccess.DataModel;
-using MSWadConsole20.Repository.DataAccess.DataModel.Data;
-using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
+using MSWadConsole20.Repository.DataModel.Data;
+using MSWadConsole20.Repository.DataModel;
+using Azure;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
@@ -63,6 +63,7 @@ namespace MSWadConsole20.Repository.DataAccess
         {
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
+            parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             parameters.Add("@CodiceFiscale", request.CodiceFiscaleUtente, DbType.String);
             parameters.Add("@CodiceWAD", request.CodiceWAD, DbType.String);
             parameters.Add("@CodiceDimensions", request.CodiceDimensions, DbType.String);
@@ -139,13 +140,44 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
+
+        public StoredData<ApplicationData> GetApplicazioneReport(ApplicationModelRequest request)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
+            AddErrorParameters(parameters);
+            var response = new StoredData<ApplicationData>();
+
+            using (var responseStored = connection.QueryMultiple("[dbo].[sp_ApplicazioniSelectReport]",
+                                           parameters,
+                                           commandType: CommandType.StoredProcedure
+                                           ))
+            {
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
+                {
+                    response.Data = responseStored.ReadFirstOrDefault<ApplicationData>() ?? new ApplicationData();
+
+                    response.Data.LstReferenti = responseStored.Read<ReferenteData>().ToList();
+
+                    response.Data.ParametroApplicazione = responseStored.Read<ApplicationParameterData>().ToList();
+
+                    response.Data.EventoClientApplicazione = responseStored.Read<ClientEventApplicationData>().ToList();
+
+                    response.Data.TracciamentoApplicazione = responseStored.Read<TrackingApplicationData>().ToList();
+                }
+            }
+
+            return response;
+        }
+
+
         private void AddErrorParameters(DynamicParameters parameters)
         {
             parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
         }
-
-
 
     }
 }
