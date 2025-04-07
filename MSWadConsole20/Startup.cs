@@ -36,6 +36,10 @@ namespace MSWadConsole20
             services.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
             services.AddSingleton<IConfigurationService, ConfigurationService>();
 
+
+            services.AddSingleton<IApplicationRepository, ApplicationRepository>();
+            services.AddSingleton<IApplicationService, ApplicationService>();
+
             // Registrazione ReferentDataAccess con la stringa di connessione da appsettings.json
             services.AddSingleton(sp => new ReferentDataAccess(connectionString));
 

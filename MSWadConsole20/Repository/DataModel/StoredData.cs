@@ -13,25 +13,22 @@ namespace MSWadConsole20.Repository.DataModel
             ErrorCode = errorCode;
             ErrorMessage = errorMessage;
         }
-    }  
-
-        public class StoredData<T> : StoredData
+        public void SetErrorResponse(DynamicParameters parameters)
         {
-            public T? Data { get; set; }
-
-            public StoredData() { }
-            public StoredData(int errorCode, string errorMessage) : base(errorCode, errorMessage) { }
-
-            public void SetErrorResponse(DynamicParameters parameters)
-            {
-                ErrorCode = parameters.Get<int>("@ErrorCode");
-                ErrorMessage = parameters.Get<string>("@ErrorMsg");
-            }
-            
+            ErrorCode = parameters.Get<int?>("@ErrorCode") ?? 0;
+            ErrorMessage = parameters.Get<string>("@ErrorMsg");
+        }
         public bool ThereIsNotError()
         {
             return ErrorCode == 0;
         }
+    }
 
-    }    
+    public class StoredData<T> : StoredData
+    {
+        public T? Data { get; set; }
+
+        public StoredData() { }
+        public StoredData(int errorCode, string errorMessage) : base(errorCode, errorMessage) { }
+    }
 }
