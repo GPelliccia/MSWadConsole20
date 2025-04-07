@@ -156,16 +156,6 @@ namespace MSWadConsole20.Repository
                 Navigator = ToRoleNavigatorModel(response.Navigator)
             };
         }
-
-        public static TipiReferentiModel ToTipiReferentiModel(this TipiReferentiData response)
-        {
-            return new TipiReferentiModel
-            {
-                Id = response.TipoReferenteID,
-                Nome = response.Nome,
-                Abbreviazione = response.Abbreviazione
-            };
-        }
         
         public static TrackingParameterModel ToTrackingParameterModel(this TrackingParameterData response)
         {
@@ -240,7 +230,7 @@ namespace MSWadConsole20.Repository
             };
         }
 
-        public static TipoReferenteModel ToTipiReferentiModel(this TipoReferenteData response)
+        public static TipoReferenteModel ToTipiReferentiModel(this TipiReferentiData response)
         {
             return new TipoReferenteModel
             {

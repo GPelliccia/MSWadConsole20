@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSWadConsole20.Contract;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
 using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel.Request.ApplicationModel;
 using MSWadConsole20.Services;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Controllers
 {
