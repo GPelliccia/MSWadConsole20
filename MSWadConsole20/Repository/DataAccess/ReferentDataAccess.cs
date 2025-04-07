@@ -1,9 +1,9 @@
 ﻿using Dapper;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel;
 using System.Data;
-using MSWadConsole20.Repository.DataModel.Data;
 using Microsoft.Data.SqlClient;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
@@ -16,9 +16,9 @@ namespace MSWadConsole20.Repository.DataAccess
             _connectionString = connectionString;
         }
 
-        public StoredData<ReferenteData>? GetReferent(ReferentRequest request)
+        public StoredResponse<ReferenteData>? GetReferent(ReferentRequest request)
         {
-            StoredData<ReferenteData> response = new StoredData<ReferenteData>();
+            StoredResponse<ReferenteData> response = new StoredResponse<ReferenteData>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -37,15 +37,15 @@ namespace MSWadConsole20.Repository.DataAccess
             );
 
             response.SetErrorResponse(parameters);
-            if (response.ThereIsNotError())
+            if (response.Success)
                 response.Data = referente;
 
             return response;
         }
 
-        public StoredData<List<ReferenteData>>? GetReferents(ReferentRequest request)
+        public StoredResponse<List<ReferenteData>>? GetReferents(ReferentRequest request)
         {
-            StoredData<List<ReferenteData>> response = new StoredData<List<ReferenteData>>();
+            StoredResponse<List<ReferenteData>> response = new StoredResponse<List<ReferenteData>>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -64,15 +64,15 @@ namespace MSWadConsole20.Repository.DataAccess
             ).AsList();
 
             response.SetErrorResponse(parameters);
-            if (response.ThereIsNotError())
+            if (response.Success)
                 response.Data = listaReferenti;
 
             return response;
         }
 
-        public StoredData<List<TipiReferenti>>? GetTypeReferents(TipiReferentiRequest request)
+        public StoredResponse<List<TipiReferenti>>? GetTypeReferents(TipiReferentiRequest request)
         {
-            StoredData<List<TipiReferenti>> response = new StoredData<List<TipiReferenti>>();
+            StoredResponse<List<TipiReferenti>> response = new StoredResponse<List<TipiReferenti>>();
 
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -88,15 +88,15 @@ namespace MSWadConsole20.Repository.DataAccess
             ).AsList();
 
             response.SetErrorResponse(parameters);
-            if (response.ThereIsNotError())
+            if (response.Success)
                 response.Data = tipiReferenti;
 
             return response;
         }
 
-        public StoredData<int> InsertReferent(ReferentRequest request)
+        public StoredResponse<int> InsertReferent(ReferentRequest request)
         {
-            var response = new StoredData<int>();
+            var response = new StoredResponse<int>();
 
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -124,7 +124,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
 
             response.SetErrorResponse(parameters);
-            if (response.ThereIsNotError())
+            if (response.Success)
             {
                 transaction.Commit();
                 response.Data = parameters.Get<int>("@ReferenteId");
@@ -137,9 +137,9 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredData UpdateReferent(ReferentRequest request)
+        public StoredResponse UpdateReferent(ReferentRequest request)
         {
-            var response = new StoredData();
+            var response = new StoredResponse();
 
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -167,7 +167,7 @@ namespace MSWadConsole20.Repository.DataAccess
                 );
 
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                     transaction.Commit();
             }
             catch (Exception ex)
@@ -178,9 +178,9 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredData ChiudiReferente(ReferentRequest request)
+        public StoredResponse ChiudiReferente(ReferentRequest request)
         {
-            var response = new StoredData();
+            var response = new StoredResponse();
 
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -199,7 +199,7 @@ namespace MSWadConsole20.Repository.DataAccess
                 );
 
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                     transaction.Commit();
             }
             catch (Exception ex)

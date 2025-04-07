@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSWadConsole20.Contract;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Controllers
 {
@@ -78,7 +78,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData<int>>> InsertLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse<int>> InsertLibrary(LibraryRequest request)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> UpdateLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse<StoredResponse>> UpdateLibrary(LibraryRequest request)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> DeleteLibrary(LibraryRequest request)
+        public ActionResult<ServiceResponse<StoredResponse>> DeleteLibrary(LibraryRequest request)
         {
             try
             {

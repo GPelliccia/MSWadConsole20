@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using MSWadConsole20.Repository.DataModel.Request.ApplicationModel;
 using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request.ApplicationModel;
 
 namespace MSWadConsole20.Repository.DataAccess
 {
@@ -21,7 +21,7 @@ namespace MSWadConsole20.Repository.DataAccess
         }
 
 
-        public StoredData<WadApplicationData> GetApplication(ApplicationModelRequest request)
+        public StoredResponse<WadApplicationData> GetApplication(ApplicationModelRequest request)
         {
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -29,7 +29,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@CodiceFiscale", request.CodiceFiscaleUtente, DbType.String);
             AddErrorParameters(parameters);
 
-            var response = new StoredData<WadApplicationData>();
+            var response = new StoredResponse<WadApplicationData>();
 
 
 
@@ -39,7 +39,7 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        ))
             {
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                 {
                     response.Data = responseStored.ReadFirstOrDefault<WadApplicationData>() ?? new WadApplicationData();
 
@@ -59,7 +59,7 @@ namespace MSWadConsole20.Repository.DataAccess
 
 
 
-        public StoredData<List<WadApplicationData>> GetApplications(ApplicationModelRequest request)
+        public StoredResponse<List<WadApplicationData>> GetApplications(ApplicationModelRequest request)
         {
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
@@ -71,7 +71,7 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@Contesto", request.Contesto, DbType.Int32);
             AddErrorParameters(parameters);
 
-            var response = new StoredData<List<WadApplicationData>>();
+            var response = new StoredResponse<List<WadApplicationData>>();
 
 
 
@@ -81,7 +81,7 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        ))
             {
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                 {
                     response.Data = responseStored.Read<WadApplicationData>().ToList();
                 }
@@ -91,14 +91,14 @@ namespace MSWadConsole20.Repository.DataAccess
         }
 
 
-        public StoredData<List<ReferenteData>> GetApplicationReferents(ApplicationModelRequest request)
+        public StoredResponse<List<ReferenteData>> GetApplicationReferents(ApplicationModelRequest request)
         {
             using var connection = new SqlConnection(_connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@ApplicazioneID", request.ApplicationId, DbType.Int32);
             AddErrorParameters(parameters);
 
-            var response = new StoredData<List<ReferenteData>>();
+            var response = new StoredResponse<List<ReferenteData>>();
 
 
 
@@ -108,7 +108,7 @@ namespace MSWadConsole20.Repository.DataAccess
                                                        ))
             {
                 response.SetErrorResponse(parameters);
-                if (response.ThereIsNotError())
+                if (response.Success)
                 {
                     response.Data = responseStored.Read<ReferenteData>().ToList();
                 }
@@ -117,10 +117,10 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredData<List<ApplicationTipologyData>> GetTipologieApplicazione()
+        public StoredResponse<List<ApplicationTipologyData>> GetTipologieApplicazione()
         {
             using var connection = new SqlConnection(_connectionString);
-            var response = new StoredData<List<ApplicationTipologyData>>();
+            var response = new StoredResponse<List<ApplicationTipologyData>>();
 
             var responseStored = connection.Query<ApplicationTipologyData>("[dbo].[sp_GetTipologieApplicazione]", commandType: CommandType.StoredProcedure).AsList();
             
@@ -128,10 +128,10 @@ namespace MSWadConsole20.Repository.DataAccess
             return response;
         }
 
-        public StoredData<List<ApplicationVisibilityData>> GetVisibilitaApplicazione()
+        public StoredResponse<List<ApplicationVisibilityData>> GetVisibilitaApplicazione()
         {
             using var connection = new SqlConnection(_connectionString);
-            var response = new StoredData<List<ApplicationVisibilityData>>();
+            var response = new StoredResponse<List<ApplicationVisibilityData>>();
 
             var responseStored = connection.Query<ApplicationVisibilityData>("[dbo].[sp_GetVisibilitaApplicazione]", commandType: CommandType.StoredProcedure).AsList();
 

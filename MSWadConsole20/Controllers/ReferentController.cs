@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSWadConsole20.Contract;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel;
 using MSWadConsole20.Services;
-using MSWadConsole20.Repository.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Controllers
 {
@@ -25,7 +25,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData<ReferenteData>>> GetReferent(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredResponse<ReferenteData>>> GetReferent(ReferentRequest request)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData<List<ReferenteData>>>> GetReferents(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredResponse<List<ReferenteData>>>> GetReferents(ReferentRequest request)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData<List<TipiReferenti>>>> GetTypeReferents(TipiReferentiRequest request)
+        public ActionResult<ServiceResponse<StoredResponse<List<TipiReferenti>>>> GetTypeReferents(TipiReferentiRequest request)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData<int>>> InsertReferent(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredResponse<int>>> InsertReferent(ReferentRequest request)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> UpdateReferent(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredResponse>> UpdateReferent(ReferentRequest request)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace MSWadConsole20.Controllers
         [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult<ServiceResponse<StoredData>> DeleteReferent(ReferentRequest request)
+        public ActionResult<ServiceResponse<StoredResponse>> DeleteReferent(ReferentRequest request)
         {
             try
             {

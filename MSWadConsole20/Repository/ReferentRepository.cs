@@ -1,9 +1,9 @@
 ﻿using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataAccess;
-using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Repository
 {
@@ -25,9 +25,9 @@ namespace MSWadConsole20.Repository
             _dataAccess = new ReferentDataAccess(_configuration["DB_CONNECTION"]);
         }
 
-        public ServiceResponse<StoredData<ReferenteData>> GetReferent(ReferentRequest request)
+        public ServiceResponse<StoredResponse<ReferenteData>> GetReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData<ReferenteData>>();
+            var response = new ServiceResponse<StoredResponse<ReferenteData>>();
             try
             {
                 response.Data = _dataAccess.GetReferent(request);
@@ -42,9 +42,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request)
+        public ServiceResponse<StoredResponse<List<ReferenteData>>> GetReferents(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData<List<ReferenteData>>>();
+            var response = new ServiceResponse<StoredResponse<List<ReferenteData>>>();
             try
             {
                 response.Data = _dataAccess.GetReferents(request);
@@ -59,9 +59,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request)
+        public ServiceResponse<StoredResponse<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request)
         {
-            var response = new ServiceResponse<StoredData<List<TipiReferenti>>>();
+            var response = new ServiceResponse<StoredResponse<List<TipiReferenti>>>();
             try
             {
                 response.Data = _dataAccess.GetTypeReferents(request);
@@ -76,9 +76,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request)
+        public ServiceResponse<StoredResponse<int>> InsertReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData<int>>();
+            var response = new ServiceResponse<StoredResponse<int>>();
             try
             {
                 response.Data = _dataAccess.InsertReferent(request);
@@ -93,9 +93,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData> UpdateReferent(ReferentRequest request)
+        public ServiceResponse<StoredResponse> UpdateReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData>();
+            var response = new ServiceResponse<StoredResponse>();
             try
             {
                 response.Data = _dataAccess.UpdateReferent(request);
@@ -110,9 +110,9 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData> DeleteReferent(ReferentRequest request)
+        public ServiceResponse<StoredResponse> DeleteReferent(ReferentRequest request)
         {
-            var response = new ServiceResponse<StoredData>();
+            var response = new ServiceResponse<StoredResponse>();
             try
             {
                 response.Data = _dataAccess.ChiudiReferente(request);

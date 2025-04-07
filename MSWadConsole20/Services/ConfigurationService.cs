@@ -1,8 +1,8 @@
 ﻿using MSWadConsole20.Contract;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Services
 {
@@ -20,10 +20,10 @@ namespace MSWadConsole20.Services
 
         public ServiceResponse<List<LibraryData>?> GetLibraries(LibraryRequest request) => _repository.GetLibraries(request);
 
-        public ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request) => _repository.InsertLibrary(request);
+        public ServiceResponse<int> InsertLibrary(LibraryRequest request) => _repository.InsertLibrary(request);
 
-        public ServiceResponse<StoredData> UpdateLibrary(LibraryRequest request) => _repository.UpdateLibrary(request);
-        public ServiceResponse<StoredData> DeleteLibrary(LibraryRequest request) => _repository.DeleteLibrary(request);
+        public ServiceResponse<StoredResponse> UpdateLibrary(LibraryRequest request) => _repository.UpdateLibrary(request);
+        public ServiceResponse<StoredResponse> DeleteLibrary(LibraryRequest request) => _repository.DeleteLibrary(request);
 
     }
 }

@@ -1,13 +1,14 @@
 ﻿using MSWadConsole20.Contract;
 using MSWadConsole20.Repository.DataAccess;
-using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using MSWadConsole20.Repository.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
+using MSWadConsole20.Contract.BusinessModel;
 
 namespace MSWadConsole20.Repository
 {
@@ -63,12 +64,12 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<List<LibraryData>?> GetLibraries(LibraryRequest request)
+        public ServiceResponse<List<LibraryModel>?> GetLibraries(LibraryRequest request)
         {
-            var response = new ServiceResponse<List<LibraryData>?>();
+            var response = new ServiceResponse<List<LibraryModel>?>();
             try
             {
-                response.Data = _dataAccess.GetLibraries(request);
+                response.Data = _dataAccess?.GetLibraries(request)?.Select(s => s.ToLibraryModel()).ToList();
                 response.Success = true;
             }
             catch (Exception ex)
@@ -80,53 +81,53 @@ namespace MSWadConsole20.Repository
             return response;
         }
 
-        public ServiceResponse<StoredData<int>> InsertLibrary(LibraryRequest request)
+        public ServiceResponse<int> InsertLibrary(LibraryRequest request)
         {
-            var response = new ServiceResponse<StoredData<int>>();
+            var response = new ServiceResponse<int>();
             try
             {
-                response.Data = _dataAccess.InsertLibrary(request);
-                response.Success = true;
+                var storedResponse = _dataAccess.InsertLibrary(request);
+                response = storedResponse.ToServiceResponse();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nella creazione della libreria");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = "Non è possibile completare l'operazione.";
             }
             return response;
         }
 
-        public ServiceResponse<StoredData> UpdateLibrary(LibraryRequest request)
+        public ServiceResponse UpdateLibrary(LibraryRequest request)
         {
-            var response = new ServiceResponse<StoredData>();
+            var response = new ServiceResponse();
             try
             {
-                response.Data = _dataAccess.UpdateLibrary(request);
-                response.Success = true;
+                var storedResponse = _dataAccess.UpdateLibrary(request);
+                response = storedResponse?.ToServiceResponse() ?? new ServiceResponse();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nella modifica della libreria");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }
 
-        public ServiceResponse<StoredData> DeleteLibrary(LibraryRequest request)
+        public ServiceResponse DeleteLibrary(LibraryRequest request)
         {
-            var response = new ServiceResponse<StoredData>();
+            var response = new ServiceResponse();
             try
             {
-                response.Data = _dataAccess.DeleteLibrary(request);
-                response.Success = true;
+                var storedResponse = _dataAccess.DeleteLibrary(request);
+                response = storedResponse?.ToServiceResponse() ?? new ServiceResponse();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Errore nel disattivare la libreria");
                 response.Success = false;
-                response.UserMessage = response.Data?.ErrorMessage;
+                response.UserMessage = response.ErrorMessage;
             }
             return response;
         }

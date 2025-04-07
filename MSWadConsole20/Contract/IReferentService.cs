@@ -1,17 +1,17 @@
-﻿using MSWadConsole20.Repository.DataModel.Request;
-using MSWadConsole20.Repository.DataModel.Response;
-using MSWadConsole20.Repository.DataModel;
-using MSWadConsole20.Repository.DataModel.Data;
+﻿using MSWadConsole20.Repository.DataAccess.DataModel;
+using MSWadConsole20.Repository.DataAccess.DataModel.Data;
+using MSWadConsole20.Repository.DataAccess.DataModel.Request;
+using MSWadConsole20.Repository.DataAccess.DataModel.Response;
 
 namespace MSWadConsole20.Contract
 {
     public interface IReferentService
     {
-        ServiceResponse<StoredData<ReferenteData>> GetReferent(ReferentRequest request);
-        ServiceResponse<StoredData<List<ReferenteData>>> GetReferents(ReferentRequest request);
-        ServiceResponse<StoredData<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request);
-        ServiceResponse<StoredData<int>> InsertReferent(ReferentRequest request);
-        ServiceResponse<StoredData> UpdateReferent(ReferentRequest request);
-        ServiceResponse<StoredData> DeleteReferent(ReferentRequest request);
+        ServiceResponse<StoredResponse<ReferenteData>> GetReferent(ReferentRequest request);
+        ServiceResponse<StoredResponse<List<ReferenteData>>> GetReferents(ReferentRequest request);
+        ServiceResponse<StoredResponse<List<TipiReferenti>>> GetTypeReferents(TipiReferentiRequest request);
+        ServiceResponse<StoredResponse<int>> InsertReferent(ReferentRequest request);
+        ServiceResponse<StoredResponse> UpdateReferent(ReferentRequest request);
+        ServiceResponse<StoredResponse> DeleteReferent(ReferentRequest request);
     }
 }
