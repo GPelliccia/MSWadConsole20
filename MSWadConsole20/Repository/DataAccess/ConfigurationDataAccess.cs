@@ -46,11 +46,14 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@Contesto", request.Contesto, DbType.String);
             parameters.Add("@CodiceFiscale", request.CodiceFiscale, DbType.String);
 
-            return Connection.Query<LibraryData>(
+            var data = Connection.Query<LibraryData>(
                 "[dbo].[sp_Library_Select]",
                 parameters,
                 commandType: CommandType.StoredProcedure
             ).AsList();
+
+            Dispose();
+            return data;
         }
 
         public StoredResponse<int> InsertLibrary(LibraryRequest request)
