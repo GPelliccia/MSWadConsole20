@@ -65,6 +65,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData<int>();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
@@ -76,28 +77,25 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@NoteLibreria", request.NoteLibreria, DbType.String);
             parameters.Add("@FlagOffline", request.FlagOffline, DbType.Boolean);
             parameters.Add("@Contesto", request.Contesto, DbType.Int32);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
 
             var x = connection.Execute(
                 "[dbo].[sp_Library_Insert]",
                 parameters,
+                transaction : transaction,
                 commandType: CommandType.StoredProcedure
             );
 
-
-            response.ErrorCode = parameters.Get<int>("@ErrorCode");
-            response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
-
-            if (response.ErrorCode == 0)
+            response.SetErrorResponse(parameters);
+            if (response.ThereIsNotError())
             {
+                transaction.Commit();
                 response.Data = parameters.Get<int>("@LibreriaApplicazioneID");
             }
             else
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
 
             return response;
         }
@@ -107,6 +105,7 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
@@ -117,28 +116,27 @@ namespace MSWadConsole20.Repository.DataAccess
             parameters.Add("@DataFineAttivazione", request.DataFineAttivazione, DbType.DateTime);
             parameters.Add("@NoteLibreria", request.NoteLibreria, DbType.String);
             parameters.Add("@FlagOffline", request.FlagOffline, DbType.Boolean);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
+
             try
             {
                 var x = connection.Execute(
-                                "[dbo].[sp_Library_Update]",
-                                parameters,
-                                commandType: CommandType.StoredProcedure
+                    "[dbo].[sp_Library_Update]",
+                    parameters,
+                    transaction: transaction,
+                    commandType: CommandType.StoredProcedure
                 );
 
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
+                    transaction.Commit();
 
-
-
-
-                response.ErrorCode = parameters.Get<int>("@ErrorCode");
-                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
+           
             return response;
         }
 
@@ -148,29 +146,37 @@ namespace MSWadConsole20.Repository.DataAccess
             var response = new StoredData();
 
             using var connection = new SqlConnection(_connectionString);
+            connection.Open();
             using var transaction = connection.BeginTransaction(); // Inizio transazione
 
             var parameters = new DynamicParameters();
             parameters.Add("@LibreriaApplicazioneID", request.LibreriaApplicazioneID, DbType.Int32);
-            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            AddErrorParameters(parameters);
+
             try
             {
                 var x = connection.Execute(
                    "[dbo].[sp_Library_Delete]",
                    parameters,
+                   transaction : transaction,
                    commandType: CommandType.StoredProcedure
                 );
 
-                response.ErrorCode = parameters.Get<int>("@ErrorCode");
-                response.ErrorMessage = parameters.Get<string>("@ErrorMsg");
+                response.SetErrorResponse(parameters);
+                if (response.ThereIsNotError())
+                    transaction.Commit();
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
             }
-            transaction.Commit();
+            
             return response;
+        }
+        private void AddErrorParameters(DynamicParameters parameters)
+        {
+            parameters.Add("@ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@ErrorMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
         }
     }
 }

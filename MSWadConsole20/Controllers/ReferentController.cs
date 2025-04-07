@@ -92,5 +92,41 @@ namespace MSWadConsole20.Controllers
             }
         }
 
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<StoredData>> UpdateReferent(ReferentRequest request)
+        {
+            try
+            {
+                var response = _ReferentService.UpdateReferent(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, null, 500);
+            }
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ConfigurationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<StoredData>> DeleteReferent(ReferentRequest request)
+        {
+            try
+            {
+                var response = _ReferentService.DeleteReferent(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, null, 500);
+            }
+        }
+
     }
 }

@@ -37,7 +37,7 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare il referente");
                 response.Success = false;
-                response.UserMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = response.Data?.ErrorMessage;
             }
             return response;
         }
@@ -54,7 +54,7 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare i referenti");
                 response.Success = false;
-                response.UserMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = response.Data?.ErrorMessage;
             }
             return response;
         }
@@ -71,7 +71,7 @@ namespace MSWadConsole20.Repository
             {
                 _logger.LogError(ex, "Errore nel recuperare i tipi dei referenti");
                 response.Success = false;
-                response.UserMessage = "Non è possibile completare l'operazione.";
+                response.UserMessage = response.Data?.ErrorMessage;
             }
             return response;
         }
@@ -86,7 +86,41 @@ namespace MSWadConsole20.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore nel recuperare il parametro di attività del servizio");
+                _logger.LogError(ex, "Errore nella creazione del referente");
+                response.Success = false;
+                response.UserMessage = response.Data?.ErrorMessage;
+            }
+            return response;
+        }
+
+        public ServiceResponse<StoredData> UpdateReferent(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData>();
+            try
+            {
+                response.Data = _dataAccess.UpdateReferent(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel modificare il referente");
+                response.Success = false;
+                response.UserMessage = response.Data?.ErrorMessage;
+            }
+            return response;
+        }
+
+        public ServiceResponse<StoredData> DeleteReferent(ReferentRequest request)
+        {
+            var response = new ServiceResponse<StoredData>();
+            try
+            {
+                response.Data = _dataAccess.ChiudiReferente(request);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore nel disattivare il referente");
                 response.Success = false;
                 response.UserMessage = response.Data?.ErrorMessage;
             }

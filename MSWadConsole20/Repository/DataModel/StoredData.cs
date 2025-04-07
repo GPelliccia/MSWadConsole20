@@ -22,7 +22,7 @@ namespace MSWadConsole20.Repository.DataModel
         {
             return ErrorCode == 0;
         }
-    }
+    }  
 
     public class StoredData<T> : StoredData
     {
@@ -30,5 +30,5 @@ namespace MSWadConsole20.Repository.DataModel
 
         public StoredData() { }
         public StoredData(int errorCode, string errorMessage) : base(errorCode, errorMessage) { }
-    }
+    }    
 }
